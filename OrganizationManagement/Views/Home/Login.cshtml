@@ -2,19 +2,16 @@
 
 @{
     ViewData["Title"] = "Admin Login";
-    var token = ViewBag.token;
+    
 }
 
 <div class="login-container">
     <h2>Admin Login</h2>
-    @if (token!=null)
-    {
+    
         <form asp-controller="Home" asp-action="Logout" method="post">
             <button type="submit" class="btn btn-danger">Logout</button>
         </form>
-    }
-    else
-    {
+   
         <form asp-action="Login" method="post">
             <div class="form-group">
                 <label asp-for="Email"></label>
@@ -30,7 +27,7 @@
 
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-    }
+    
 </div>
 
 @section Scripts {

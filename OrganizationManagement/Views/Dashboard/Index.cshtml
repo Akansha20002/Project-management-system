@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@* @model OrganizationManagement.DTO.DashboardDTO *@
+
+@* @{ *@
+@*     ViewData["Title"] = "Dashboard"; *@
+@*     var token = ViewBag.token; *@
+@* } *@
+
+@* <h1>Welcome, @Model.AdminName!</h1> *@
+@* <a asp-controller="Home">Register organisation</a> *@
+
+@* <h3>List of Organizations</h3> *@
+@* <table> *@
+@*     <tr> *@
+@*         <th>Organization Name</th> *@
+@*     </tr> *@
+@*     @foreach (var org in Model.organizationInfo) *@
+@*     { *@
+@*         <tr> *@
+@*             <td>@org.Name</td> *@
+@*         </tr> *@
+@*     } *@
+@* </table> *@
+
+@* @section Scripts { *@
+@*     <script> *@
+@*         $(document).ready(function () { *@
+@*             var token = '@Html.Raw(Json.Serialize(token))'; *@
+@*             if (token && token !== "null" && token !== "") { *@
+@*                 localStorage.setItem("token", token); *@
+@*                 console.log("Token stored:", token); *@
+@*             } *@
+@*         }); *@
+@*     </script> *@
+
+
+
+@* } *@
+
+@model OrganizationManagement.DTO.DashboardDTO
+
+<h1>Welcome, @Model?.AdminName!</h1> <!-- Null-safe access to AdminName -->
+<a asp-controller="Dashboard">Register organisation</a>
+
+<h3>List of Organizations</h3>
+<table>
+    <tr>
+        <th>Organization Name</th>
+    </tr>
+
+    @if (Model?.organizationInfo != null && Model.organizationInfo.Any())
+    {
+        @foreach (var org in Model.organizationInfo)
+        {
+            <tr>
+                <td>@org.Name</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td>No organizations available.</td>
+        </tr>
+    }
+</table>
+
