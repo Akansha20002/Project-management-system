@@ -1,39 +1,33 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+
 using OrganizationManagement.DBContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure the DbContext to use PostgreSQL
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection"))
 );
 
-// Add services to the container
+
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication("CustomCookieAuth")
+    .AddCookie("CustomCookieAuth", options =>
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        var jwt = builder.Configuration.GetSection("Jwt");
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwt["Issuer"],
-            ValidAudience = jwt["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
+        options.Cookie.Name = "OrganizationManagement";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.ExpireTimeSpan = TimeSpan.FromHours(24);
+        options.LoginPath = "/Home/Login";
+        options.LogoutPath = "/Home/Logout";
+        options.AccessDeniedPath = "/Home/AccessDenied";
+        options.SlidingExpiration = true;
     });
-
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 
 
 var app = builder.Build();

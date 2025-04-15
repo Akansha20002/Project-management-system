@@ -2,21 +2,10 @@
 
 @{
     ViewData["Title"] = "Dashboard";
-    var token = ViewBag.token;
+
 }
 
 <h1>Dashboard</h1>
 <a asp-controller="Home" >Register organisation</a>
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            var token = '@Html.Raw(Json.Serialize(token))';
-            if (token && token !== "null" && token !== "") {
-                localStorage.setItem("token", token);
-                console.log("Token stored:", token);
-            }
-        });
-    </script>
 
-}
