@@ -27,20 +27,20 @@ builder.Services.AddAuthentication("CustomCookieAuth")
         options.AccessDeniedPath = "/Home/AccessDenied";
         options.SlidingExpiration = true;
     });
-//builder.Services.AddAuthorization();
+
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();  // Add HSTS only in non-development environments
+    app.UseHsts(); 
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();  // Enable static files serving
+app.UseStaticFiles();  
 
 app.UseRouting();
 app.UseAuthentication();

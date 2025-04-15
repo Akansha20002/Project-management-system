@@ -28,22 +28,6 @@ namespace OrganizationManagement.Controllers
         {
             return View();
         }
-
-        //[HttpPost]
-
-        //public IActionResult Login(AdminDto admin)
-        //{
-        //    var existingAdmin = _context.Admins
-        //        .FirstOrDefault(a => a.Email == admin.Email && a.Password == admin.Password);
-
-        //    if (existingAdmin != null)
-        //    {
-        //        return View("Dashboard"); 
-        //    }
-
-        //    ModelState.AddModelError(string.Empty, "Invalid login");
-        //    return View();
-        //}
         [HttpPost]
         public async Task<IActionResult> Login(AdminDto admin)
         {
@@ -59,7 +43,7 @@ namespace OrganizationManagement.Controllers
             var claims = new List<Claim>
      {
          new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-         new Claim(ClaimTypes.Name, user.Email),
+         new Claim(ClaimTypes.Name, user.Name),
          new Claim("Role", "Admin")
      };
 
@@ -72,7 +56,7 @@ namespace OrganizationManagement.Controllers
 
             await HttpContext.SignInAsync("CustomCookieAuth", new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Index","Dashboard");
         }
         [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = "CustomCookieAuth")]
         public IActionResult Dashboard()
