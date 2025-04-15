@@ -1,37 +1,95 @@
-﻿@model OrganizationManagement.Models.Organization
+﻿@model OrganizationManagement.DTO.OrganizationDTO
 
 @{
     ViewBag.Title = "Dashboard";
 }
 
-<h4>Welcome to the Dashboard</h4>
-<h7><a href="#">Organizations</a></h7>
+<div class="container-fluid">
+    <div class="row">
+        
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <h4>Dashboard</h4>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0);" id="showOrganizationsLink">
+                            Organizations
+                        </a>
+                    </li>
+                    
+                    <!-- Register Button at the top-right of the sidebar -->
+                    <li class="nav-item mt-5">
+                        <div class="d-flex justify-content-end" style="position: absolute; top: 65px; right: 20px;">
+                            <form asp-action="ShowRegisterForm" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-primary">Register Organization</button> <!-- Right-aligned button -->
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-@if (ViewBag.SuccessMessage != null)
-{
-    <div class="alert alert-success">@ViewBag.SuccessMessage</div>
-}
+        <!-- Main content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="alert alert-success">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
 
+            @if (ViewBag.ShowForm == true)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Register Organization</h5>
 
-<form asp-action="ShowRegisterForm" method="post">
-    @Html.AntiForgeryToken()
-    <div class="text-end">
-    <button type="submit" class="btn btn-primary">Register Organization</button>
+                        <form asp-action="RegisterName" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                <label asp-for="Name">Organization Name</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            }
+
+            <!-- Organizations list -->
+            <div class="row" id="organizationsContainer" style="display:none;">
+                <h5 class="my-4">Registered Organizations</h5>
+
+                @foreach (var org in Model.Organizations)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">@org.Name</h5>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </main>
     </div>
-</form>
+</div>
 
-
-@if (ViewBag.ShowForm == true)                 
-{
-    <form asp-action="RegisterName" method="post">
-        @Html.AntiForgeryToken()
-
-        <div class="form-group">
-            <label asp-for="Name"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-success">Submit</button>
-    </form>
-}
+<!-- Script to toggle organizations visibility -->
+<script>
+    document.getElementById('showOrganizationsLink').addEventListener('click', function() {
+        var container = document.getElementById('organizationsContainer');
+        if (container.style.display === 'none' || container.style.display === '') {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    });
+</script>

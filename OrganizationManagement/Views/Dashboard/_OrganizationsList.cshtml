@@ -1,0 +1,18 @@
+@model OrganizationManagement.DTO.OrganizationDTO
+
+<h5>Registered Organizations:</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Organization Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var org in Model.Organizations)
+        {
+            <tr>
+                <td>@org.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
