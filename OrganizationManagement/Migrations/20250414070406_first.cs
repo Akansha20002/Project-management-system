@@ -28,7 +28,7 @@ namespace OrganizationManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Organization",
+                name: "Organizations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -39,16 +39,16 @@ namespace OrganizationManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organization", x => x.Id);
+                    table.PrimaryKey("PK_Organizations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Organization_Admins_AdminId",
+                        name: "FK_Organizations_Admins_AdminId",
                         column: x => x.AdminId,
                         principalTable: "Admins",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Projects",
                 columns: table => new
                 {
                     ProjectId = table.Column<int>(type: "integer", nullable: false)
@@ -62,17 +62,17 @@ namespace OrganizationManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.ProjectId);
+                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
                     table.ForeignKey(
-                        name: "FK_Project_Organization_OrganizationId",
+                        name: "FK_Projects_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
-                        principalTable: "Organization",
+                        principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestPlan",
+                name: "TestsPlans",
                 columns: table => new
                 {
                     TestPlanId = table.Column<int>(type: "integer", nullable: false)
@@ -85,17 +85,17 @@ namespace OrganizationManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestPlan", x => x.TestPlanId);
+                    table.PrimaryKey("PK_TestsPlans", x => x.TestPlanId);
                     table.ForeignKey(
-                        name: "FK_TestPlan_Project_ProjectId",
+                        name: "FK_TestsPlans_Projects_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "Project",
+                        principalTable: "Projects",
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestSuite",
+                name: "TestSuites",
                 columns: table => new
                 {
                     TestSuiteId = table.Column<int>(type: "integer", nullable: false)
@@ -106,17 +106,17 @@ namespace OrganizationManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestSuite", x => x.TestSuiteId);
+                    table.PrimaryKey("PK_TestSuites", x => x.TestSuiteId);
                     table.ForeignKey(
-                        name: "FK_TestSuite_TestPlan_TestPlanId",
+                        name: "FK_TestSuites_TestsPlans_TestPlanId",
                         column: x => x.TestPlanId,
-                        principalTable: "TestPlan",
+                        principalTable: "TestsPlans",
                         principalColumn: "TestPlanId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestCase",
+                name: "TestCases",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -129,17 +129,17 @@ namespace OrganizationManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestCase", x => x.Id);
+                    table.PrimaryKey("PK_TestCases", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TestCase_TestSuite_TestSuiteId",
+                        name: "FK_TestCases_TestSuites_TestSuiteId",
                         column: x => x.TestSuiteId,
-                        principalTable: "TestSuite",
+                        principalTable: "TestSuites",
                         principalColumn: "TestSuiteId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestStep",
+                name: "TestSteps",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -151,43 +151,43 @@ namespace OrganizationManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestStep", x => x.Id);
+                    table.PrimaryKey("PK_TestSteps", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TestStep_TestCase_TestCaseId",
+                        name: "FK_TestSteps_TestCases_TestCaseId",
                         column: x => x.TestCaseId,
-                        principalTable: "TestCase",
+                        principalTable: "TestCases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Organization_AdminId",
-                table: "Organization",
+                name: "IX_Organizations_AdminId",
+                table: "Organizations",
                 column: "AdminId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_OrganizationId",
-                table: "Project",
+                name: "IX_Projects_OrganizationId",
+                table: "Projects",
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestCase_TestSuiteId",
-                table: "TestCase",
+                name: "IX_TestCases_TestSuiteId",
+                table: "TestCases",
                 column: "TestSuiteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestPlan_ProjectId",
-                table: "TestPlan",
+                name: "IX_TestsPlans_ProjectId",
+                table: "TestsPlans",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestStep_TestCaseId",
-                table: "TestStep",
+                name: "IX_TestSteps_TestCaseId",
+                table: "TestSteps",
                 column: "TestCaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestSuite_TestPlanId",
-                table: "TestSuite",
+                name: "IX_TestSuites_TestPlanId",
+                table: "TestSuites",
                 column: "TestPlanId");
         }
 
@@ -195,22 +195,22 @@ namespace OrganizationManagement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TestStep");
+                name: "TestSteps");
 
             migrationBuilder.DropTable(
-                name: "TestCase");
+                name: "TestCases");
 
             migrationBuilder.DropTable(
-                name: "TestSuite");
+                name: "TestSuites");
 
             migrationBuilder.DropTable(
-                name: "TestPlan");
+                name: "TestsPlans");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Organization");
+                name: "Organizations");
 
             migrationBuilder.DropTable(
                 name: "Admins");

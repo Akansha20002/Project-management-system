@@ -71,7 +71,7 @@ namespace OrganizationManagement.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.ToTable("Organization");
+                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.Project", b =>
@@ -108,7 +108,7 @@ namespace OrganizationManagement.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.TestCase", b =>
@@ -142,7 +142,7 @@ namespace OrganizationManagement.Migrations
 
                     b.HasIndex("TestSuiteId");
 
-                    b.ToTable("TestCase");
+                    b.ToTable("TestCases");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.TestPlan", b =>
@@ -178,7 +178,7 @@ namespace OrganizationManagement.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("TestPlan");
+                    b.ToTable("TestsPlans");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.TestStep", b =>
@@ -208,7 +208,7 @@ namespace OrganizationManagement.Migrations
 
                     b.HasIndex("TestCaseId");
 
-                    b.ToTable("TestStep");
+                    b.ToTable("TestSteps");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.TestSuite", b =>
@@ -235,7 +235,7 @@ namespace OrganizationManagement.Migrations
 
                     b.HasIndex("TestPlanId");
 
-                    b.ToTable("TestSuite");
+                    b.ToTable("TestSuites");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.Organization", b =>

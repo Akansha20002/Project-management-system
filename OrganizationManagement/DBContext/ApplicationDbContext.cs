@@ -10,5 +10,11 @@ namespace OrganizationManagement.DBContext
         {
         }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<TestPlan> TestsPlans { get; set; }
+        public DbSet<TestSuite> TestSuites { get; set; }
+        public DbSet<TestCase> TestCases { get; set; }
+        public DbSet<TestStep> TestSteps { get; set; }
     }
     }

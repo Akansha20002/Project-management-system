@@ -27,24 +27,65 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+
+                    <!-- Login & Register Buttons -->
+                    <div id="loginForm">
+                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Login">Login</a>
+                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Register">Register</a>
+                    </div>
+
+                    <!-- Logout Button -->
+                    <form method="post" asp-controller="Home" asp-action="Logout" id="logoutForm" style="display: none;">
+                        <button type="submit" id="logoutBtn" class="btn btn-outline-danger">Logout</button>
+                    </form>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
+    @RenderSection("Script", required: false)
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - OrganizationManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        <script>
+            function toggleAuthButtons() {
+                const token = localStorage.getItem("token");
+
+                const logoutForm = document.getElementById("logoutForm");
+                const loginForm = document.getElementById("loginForm");
+
+                if (token) {
+                    logoutForm.style.display = "block";
+                    loginForm.style.display = "none";
+                } else {
+                    logoutForm.style.display = "none";
+                    loginForm.style.display = "block";
+                }
+            }
+
+          
+            document.getElementById('logoutBtn')?.addEventListener('click', function (event) {
+                event.preventDefault();
+                localStorage.removeItem("token");
+               
+                window.location.href = '@Url.Action("Login", "Home")';
+            });
+    </script>
 </body>
 </html>
