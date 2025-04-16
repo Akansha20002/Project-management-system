@@ -1,0 +1,6 @@
+@{
+    ViewData["Title"] = "Post Login Options";
+}
+<h2>Login successful</h2>
+<p>User ID: @ViewBag.UserId</p>
+<a class="btn btn-success" asp-controller="Account" asp-action="RegisterName" asp-route-userId="@ViewBag.UserId">Add Organization</a>

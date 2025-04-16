@@ -45,6 +45,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDeveloperExceptionPage();
 
 // Define the default route
 app.MapControllerRoute(

@@ -22,7 +22,7 @@ namespace OrganizationManagement.DTO
                 ErrorMessage = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.")]
             public string Password { get; set; }
         [Required(ErrorMessage = "Role is required")]
-        public string Role {  get; set; }
+        public string? Role {  get; set; }
 
 
         [ValidateNever]

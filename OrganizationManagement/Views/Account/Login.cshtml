@@ -17,28 +17,23 @@
                     </div>
                 }
 
-                <form asp-action="Login" method="post" novalidate>
+                <form id="loginForm" asp-action="Login" method="post" >
                     <div class="form-floating mb-3">
                         <input asp-for="Email" class="form-control" placeholder="Email" />
                         <label asp-for="Email"></label>
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+                        <!-- <span asp-validation-for="Email" class="text-danger small"></span> -->
                     </div>
 
                     <div class="form-floating mb-4">
                         <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
                         <label asp-for="Password"></label>
-                        <span asp-validation-for="Password" class="text-danger small"></span>
+                        <!-- <span asp-validation-for="Password" class="text-danger small"></span> -->
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                    <button type="submit" class="btn btn-primary w-100 py-2" id="loginButton">Login Button</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
