@@ -1,0 +1,44 @@
+﻿@model OrganizationManagement.DTO.AdminDto
+
+@{
+    ViewData["Title"] = "User Login";
+}
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="col-md-5">
+        <div class="card shadow-lg rounded-4 border-0">
+            <div class="card-body p-5">
+                <h3 class="text-center mb-4">User Login</h3>
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger text-center">
+                        @TempData["Error"]
+                    </div>
+                }
+
+                <form asp-action="Login" method="post" novalidate>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="Email" />
+                        <label asp-for="Email"></label>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
+                        <label asp-for="Password"></label>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

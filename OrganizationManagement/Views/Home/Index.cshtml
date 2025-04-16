@@ -1,11 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Project Management ";
+    ViewData["Title"] = "Project Management";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Project Management
-    </h1>
-  <a href="#">CreateOrganzization</a>
-  <br />
-    <a asp-action="Login"> Login </a>
+    <h1 class="display-4">Project Management</h1>
+
+    <a href="#" data-bs-toggle="modal" data-bs-target="#authModal">Create Organization</a>
+    <br />
+    <a asp-action="Login">Login</a>
+</div>
+
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="authModalLabel">Welcome</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p>Please log in or register to continue creating an organization.</p>
+                <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="btn btn-secondary" asp-controller="Account" asp-action="Register">Register</a>
+            </div>
+
+        </div>
+    </div>
 </div>

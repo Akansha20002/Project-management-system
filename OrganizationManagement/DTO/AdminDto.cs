@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace OrganizationManagement.DTO
 {
@@ -9,8 +11,9 @@ namespace OrganizationManagement.DTO
             [Required, MaxLength(50)]
             public string Name { get; set; }
 
-            [EmailAddress]
-            public string Email { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string Email { get; set; }
 
             [Required]
             [StringLength(100, MinimumLength = 8)]
@@ -18,9 +21,11 @@ namespace OrganizationManagement.DTO
             [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
                 ErrorMessage = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.")]
             public string Password { get; set; }
-            public string Role {  get; set; }
+        [Required(ErrorMessage = "Role is required")]
+        public string Role {  get; set; }
 
-          
-            public ICollection<OrganizationDTO> Organizations { get; set; }
+
+        [ValidateNever]
+        public ICollection<OrganizationDTO> Organizations { get; set; }
         }
     }
