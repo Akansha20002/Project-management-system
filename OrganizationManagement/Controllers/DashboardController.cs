@@ -18,7 +18,7 @@ namespace OrganizationManagement.Controllers
             _logger = logger;
         }
 
-        // Index action that loads the page with or without organizations
+ 
         public IActionResult Index()
         {
             var orgList = _tables.Organizations
@@ -28,7 +28,7 @@ namespace OrganizationManagement.Controllers
                     Name = o.Name
                 }).ToList();
 
-            // Create the model that will pass the organization list
+            
             var model = new OrganizationDTO
             {
                 Organizations = orgList
@@ -39,18 +39,18 @@ namespace OrganizationManagement.Controllers
                 ViewBag.SuccessMessage = TempData["Success"].ToString();
             }
 
-            ViewBag.ShowForm = false; // Initially, don't show the form
-            return View(model); // Return the model containing the organization list
+            ViewBag.ShowForm = false; 
+            return View(model);
         }
 
-        // Show the register form when clicked
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ShowRegisterForm()
         {
             ViewBag.ShowForm = true;
 
-            // Fetch organizations list to repopulate after showing form
+          
             var orgList = _tables.Organizations
                 .Select(o => new OrganizationDTO
                 {
@@ -64,14 +64,13 @@ namespace OrganizationManagement.Controllers
             });
         }
 
-        // Register new organization and save to the database
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult RegisterName(OrganizationDTO model)
         {
             if (ModelState.IsValid)
             {
-                // Create a new organization and add it to the database
+             
                 var newOrg = new Organization
                 {
                     Name = model.Name
@@ -81,10 +80,9 @@ namespace OrganizationManagement.Controllers
                 _tables.SaveChanges();
 
                 TempData["Success"] = "Organization registered successfully!";
-                return RedirectToAction("Index"); // Redirect to Index after successful registration
+                return RedirectToAction("Index");
             }
 
-            // If validation fails, repopulate the organization list
             model.Organizations = _tables.Organizations
                 .Select(o => new OrganizationDTO
                 {
@@ -92,11 +90,11 @@ namespace OrganizationManagement.Controllers
                     Name = o.Name
                 }).ToList();
 
-            ViewBag.ShowForm = true; // Show the form again
+            ViewBag.ShowForm = true; 
             return View("Index", model);
         }
 
-        // Action to show organizations list when clicked on "Organizations"
+       
         public IActionResult ViewOrganizations()
         {
             var orgList = _tables.Organizations
@@ -111,7 +109,7 @@ namespace OrganizationManagement.Controllers
                 Organizations = orgList
             };
 
-            return PartialView("_OrganizationsList", model); // Return the partial view with the organization list
+            return PartialView("_OrganizationsList", model); 
         }
     }
 }

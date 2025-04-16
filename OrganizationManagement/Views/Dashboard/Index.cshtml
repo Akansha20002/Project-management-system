@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row">
         
-        <!-- Sidebar -->
+      
         <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
@@ -20,7 +20,7 @@
                         </a>
                     </li>
                     
-                    <!-- Register Button at the top-right of the sidebar -->
+                   
                     <li class="nav-item mt-5">
                         <div class="d-flex justify-content-end" style="position: absolute; top: 65px; right: 20px;">
                             <form asp-action="ShowRegisterForm" method="post">
@@ -33,7 +33,7 @@
             </div>
         </nav>
 
-        <!-- Main content -->
+      
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             @if (ViewBag.SuccessMessage != null)
             {
@@ -63,7 +63,7 @@
                 </div>
             }
 
-            <!-- Organizations list -->
+            
             <div class="row" id="organizationsContainer" style="display:none;">
                 <h5 class="my-4">Registered Organizations</h5>
 
@@ -82,7 +82,7 @@
     </div>
 </div>
 
-<!-- Script to toggle organizations visibility -->
+
 <script>
     document.getElementById('showOrganizationsLink').addEventListener('click', function() {
         var container = document.getElementById('organizationsContainer');
