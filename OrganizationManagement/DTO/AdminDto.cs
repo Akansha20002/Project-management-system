@@ -18,6 +18,7 @@ namespace OrganizationManagement.DTO
             [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
                 ErrorMessage = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.")]
             public string Password { get; set; }
+            public string Role {  get; set; }
 
           
             public ICollection<OrganizationDTO> Organizations { get; set; }

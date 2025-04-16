@@ -2,12 +2,11 @@
 
 @{
     ViewBag.Title = "Dashboard";
+    bool showForm = (bool?)ViewBag.ShowForm == true;
 }
 
 <div class="container-fluid">
     <div class="row">
-        
-      
         <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
@@ -19,13 +18,10 @@
                             Organizations
                         </a>
                     </li>
-                    
-                   
                     <li class="nav-item mt-5">
-                        <div class="d-flex justify-content-end" style="position: absolute; top: 65px; right: 20px;">
+                        <div class="d-flex justify-content-end" style="position: absolute; top: 80px; right: 20px;">
                             <form asp-action="ShowRegisterForm" method="post">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-primary">Register Organization</button> <!-- Right-aligned button -->
+                                <button type="submit" class="btn btn-primary">Register Organization</button>
                             </form>
                         </div>
                     </li>
@@ -33,63 +29,63 @@
             </div>
         </nav>
 
-      
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             @if (ViewBag.SuccessMessage != null)
             {
-                <div class="alert alert-success">
-                    @ViewBag.SuccessMessage
-                </div>
+                <div class="alert alert-success mt-3">@ViewBag.SuccessMessage</div>
+            }
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger mt-3">@ViewBag.ErrorMessage</div>
             }
 
-            @if (ViewBag.ShowForm == true)
+            @if (showForm)
             {
-                <div class="card shadow-sm">
+                <div class="card shadow-sm my-4">
                     <div class="card-body">
                         <h5 class="card-title">Register Organization</h5>
-
                         <form asp-action="RegisterName" method="post">
                             @Html.AntiForgeryToken()
-
                             <div class="form-group">
-                                <label asp-for="Name">Organization Name</label>
+                                <label asp-for="Name"></label>
                                 <input asp-for="Name" class="form-control" />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
-
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
                         </form>
                     </div>
                 </div>
             }
 
-            
-            <div class="row" id="organizationsContainer" style="display:none;">
-                <h5 class="my-4">Registered Organizations</h5>
-
-                @foreach (var org in Model.Organizations)
-                {
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">@org.Name</h5>
+            @if (Model.Organizations != null && Model.Organizations.Any())
+            {
+                <div class="row" id="organizationsContainer">
+                    <h5 class="my-4 w-100">Registered Organizations</h5>
+                    @foreach (var org in Model.Organizations)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">@org.Name</h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
         </main>
     </div>
 </div>
 
-
 <script>
-    document.getElementById('showOrganizationsLink').addEventListener('click', function() {
+    document.getElementById('showOrganizationsLink')?.addEventListener('click', function () {
         var container = document.getElementById('organizationsContainer');
-        if (container.style.display === 'none' || container.style.display === '') {
-            container.style.display = 'block';
-        } else {
-            container.style.display = 'none';
-        }
+        container.style.display = (container.style.display === 'none' || container.style.display === '') ? 'block' : 'none';
     });
 </script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

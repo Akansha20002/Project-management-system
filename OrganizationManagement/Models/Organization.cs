@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace OrganizationManagement.Models
 {
@@ -10,8 +11,8 @@ namespace OrganizationManagement.Models
         public string Name { get; set; }
 
         [Required]
-        public int CreatedBy { get; set; }
+        public int CreatedBy { get; set; } // Represents the user ID who created the organization
 
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Project>? Projects { get; set; }
     }
 }

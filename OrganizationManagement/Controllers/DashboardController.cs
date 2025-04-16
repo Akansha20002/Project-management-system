@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using OrganizationManagement.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
+using OrganizationManagement.Models;
+using System.Security.Claims;
 
 namespace OrganizationManagement.Controllers
 {
@@ -18,7 +19,6 @@ namespace OrganizationManagement.Controllers
             _logger = logger;
         }
 
- 
         public IActionResult Index()
         {
             var orgList = _tables.Organizations
@@ -28,29 +28,27 @@ namespace OrganizationManagement.Controllers
                     Name = o.Name
                 }).ToList();
 
-            
             var model = new OrganizationDTO
             {
                 Organizations = orgList
             };
 
             if (TempData["Success"] != null)
-            {
                 ViewBag.SuccessMessage = TempData["Success"].ToString();
-            }
 
-            ViewBag.ShowForm = false; 
+            if (TempData["Error"] != null)
+                ViewBag.ErrorMessage = TempData["Error"].ToString();
+
+            ViewBag.ShowForm = false;
             return View(model);
         }
 
-     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ShowRegisterForm()
         {
             ViewBag.ShowForm = true;
 
-          
             var orgList = _tables.Organizations
                 .Select(o => new OrganizationDTO
                 {
@@ -68,12 +66,21 @@ namespace OrganizationManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RegisterName(OrganizationDTO model)
         {
+            if (_tables.Organizations.Any(o => o.Name == model.Name))
+            {
+                TempData["Error"] = "An organization with this name already exists.";
+                return RedirectToAction("Index");
+            }
+
             if (ModelState.IsValid)
             {
-             
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
                 var newOrg = new Organization
                 {
-                    Name = model.Name
+                    Name = model.Name,
+                    CreatedBy= currentUserId
+                  
                 };
 
                 _tables.Organizations.Add(newOrg);
@@ -90,26 +97,8 @@ namespace OrganizationManagement.Controllers
                     Name = o.Name
                 }).ToList();
 
-            ViewBag.ShowForm = true; 
+            ViewBag.ShowForm = true;
             return View("Index", model);
-        }
-
-       
-        public IActionResult ViewOrganizations()
-        {
-            var orgList = _tables.Organizations
-                .Select(o => new OrganizationDTO
-                {
-                    Id = o.Id,
-                    Name = o.Name
-                }).ToList();
-
-            var model = new OrganizationDTO
-            {
-                Organizations = orgList
-            };
-
-            return PartialView("_OrganizationsList", model); 
         }
     }
 }
