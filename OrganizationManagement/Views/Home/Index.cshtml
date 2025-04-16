@@ -3,7 +3,11 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Project Management
-    </h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Project Management</h1>
+    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+
+    <div class="mt-4">
+        <a class="btn btn-primary me-2" asp-controller="Home" asp-action="Login">Login</a>
+        <a class="btn btn-success" asp-controller="Home" asp-action="Create">Create Organization</a>
+    </div>
 </div>
