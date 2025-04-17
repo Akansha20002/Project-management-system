@@ -1,0 +1,27 @@
+﻿@model OrganizationManagement.DTO.OrganizationDTO
+
+@{
+    ViewBag.Title = "Register Organization";
+    int userId = ViewBag.UserId;
+}
+
+<h2>Register New Organization</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    </div>
+}
+
+<form asp-action="RegisterName" asp-controller="Account" method="post">
+    <input type="hidden" name="userId" value="@userId" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Register</button>
+</form>

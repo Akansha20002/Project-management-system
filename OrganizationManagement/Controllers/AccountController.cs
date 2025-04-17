@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OrganizationManagement.Controllers
@@ -24,26 +25,11 @@ namespace OrganizationManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login( AdminDto model)
-        
+        public async Task<IActionResult> Login(AdminDto model)
         {
-             Console.WriteLine("LOGIN ACTION REACHED");
-        //   var abc=  _tables.Admins.ToList();
-
-        //   foreach(var a in abc){
-        //     if(a.Role=="user"){
-        //     Console.WriteLine(a.Name);
-        //     Console.WriteLine(a.Email);
-        //     Console.WriteLine(a.Password);
-        //     }
-        //   }
-             
-        //       Console.WriteLine("1");
-
             var user = await _tables.Admins.FirstOrDefaultAsync(a => a.Email == model.Email);
             if (user == null || user.Role != "user")
             {
-                // Console.WriteLine("2");
                 ModelState.AddModelError("", "Invalid email or unauthorized role.");
                 return View(model);
             }
@@ -56,9 +42,8 @@ namespace OrganizationManagement.Controllers
                 ModelState.AddModelError("", "Invalid password.");
                 return View(model);
             }
-              Console.WriteLine("Redirecting to PostLoginOptions");
-           return RedirectToAction("PostLoginOptions", "Account", new { userId = user.Id });
 
+            return RedirectToAction("PostLoginOptions", new { userId = user.Id });
         }
 
         [HttpGet]
@@ -104,17 +89,65 @@ namespace OrganizationManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> PostLoginOptions(int userId)
         {
-            // Console.WriteLine("1");
             var user = await _tables.Admins.FindAsync(userId);
             if (user == null || user.Role != "user")
             {
-            //   Console.WriteLine("2");
                 return RedirectToAction("Login");
             }
-        //   Console.WriteLine("3");
+
             ViewBag.UserId = userId;
+
+            var organizations = await _tables.Organizations
+                                             .Where(o => o.CreatedBy == userId)
+                                             .ToListAsync();
+            ViewBag.Organizations = organizations;
+
             return View();
         }
-        
+
+        [HttpGet]
+        public IActionResult RegisterName(int userId)
+        {
+            ViewBag.UserId = userId;
+            return View(new OrganizationDTO());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterName(int userId, OrganizationDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.UserId = userId;
+                return View(model);
+            }
+
+            // Check if same user has already registered same organization name
+            var alreadyExists = await _tables.Organizations
+                .AnyAsync(o => o.CreatedBy == userId && o.Name == model.Name);
+
+            if (alreadyExists)
+            {
+                ModelState.AddModelError("", "You have already registered an organization with this name.");
+                ViewBag.UserId = userId;
+                return View(model);
+            }
+
+            var organization = new Organization
+            {
+                Name = model.Name,
+                CreatedBy = userId
+            };
+
+            await _tables.Organizations.AddAsync(organization);
+            await _tables.SaveChangesAsync();
+
+            return RedirectToAction("PostLoginOptions", new { userId = userId });
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            return RedirectToAction("Login");
+        }
     }
 }
