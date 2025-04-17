@@ -1,24 +1,32 @@
-<h2>Your Organizations</h2>
 
-@if (ViewBag.Organizations != null && ViewBag.Organizations.Count > 0)
+@{
+    var userId = ViewBag.UserId;
+    var organizations = ViewBag.Organizations as List<OrganizationManagement.Models.Organization>;
+}
+
+<h2>Welcome User!</h2>
+
+<a class="btn btn-primary" href="@Url.Action("RegisterName", "Account", new { userId = userId })">
+    ? Add Organization
+</a>
+
+<a class="btn btn-danger" href="@Url.Action("Logout", "Account")" style="margin-left: 10px;">
+    ?? Logout
+</a>
+
+<br />
+<br />
+
+<h3>Your Organizations</h3>
+@if (organizations != null && organizations.Any())
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Organization Name</th>
-                @* <th>Created By</th> *@
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var organization in ViewBag.Organizations)
-            {
-                <tr>
-                    <td>@organization.Name</td>
-                    @* <td>@organization.CreatedBy</td>  <!-- You can replace this with the user name if needed --> *@
-                </tr>
-            }
-        </tbody>
-    </table>
+    <ul class="list-group">
+        @foreach (var org in organizations)
+        {
+            <li class="list-group-item">@org.Name</li>
+        }
+    </ul>
+
 }
 else
 {

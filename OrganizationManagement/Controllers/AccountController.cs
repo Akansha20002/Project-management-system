@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OrganizationManagement.Controllers
@@ -26,7 +27,7 @@ namespace OrganizationManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AdminDto model)
         {
-            Console.WriteLine("LOGIN ACTION REACHED");
+
 
             var user = await _tables.Admins.FirstOrDefaultAsync(a => a.Email == model.Email);
             if (user == null || user.Role != "user")
@@ -44,8 +45,9 @@ namespace OrganizationManagement.Controllers
                 return View(model);
             }
 
-            Console.WriteLine("Redirecting to PostLoginOptions");
-            return RedirectToAction("PostLoginOptions", "Account", new { userId = user.Id });
+
+            return RedirectToAction("PostLoginOptions", new { userId = user.Id });
+
         }
 
         [HttpGet]
@@ -97,17 +99,17 @@ namespace OrganizationManagement.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Fetch organizations created by the logged-in user
-            var userOrganizations = await _tables.Organizations
-                .Where(o => o.CreatedBy == userId)
-                .ToListAsync();
 
             ViewBag.UserId = userId;
-            ViewBag.Organizations = userOrganizations;  // Pass organizations to the view
+
+            var organizations = await _tables.Organizations
+                                             .Where(o => o.CreatedBy == userId)
+                                             .ToListAsync();
+            ViewBag.Organizations = organizations;
+
 
             return View();
         }
-
 
 
         [HttpGet]
@@ -117,7 +119,7 @@ namespace OrganizationManagement.Controllers
             return View(new OrganizationDTO());
         }
 
-    
+
         [HttpPost]
         public async Task<IActionResult> RegisterName(int userId, OrganizationDTO model)
         {
@@ -127,11 +129,22 @@ namespace OrganizationManagement.Controllers
                 return View(model);
             }
 
+            // Check if same user has already registered same organization name
+            var alreadyExists = await _tables.Organizations
+                .AnyAsync(o => o.CreatedBy == userId && o.Name == model.Name);
+
+            if (alreadyExists)
+            {
+                ModelState.AddModelError("", "You have already registered an organization with this name.");
+                ViewBag.UserId = userId;
+                return View(model);
+            }
+
             var organization = new Organization
             {
                 Name = model.Name,
-                //Id = userId,
-                CreatedBy=userId
+                CreatedBy = userId
+
             };
 
             await _tables.Organizations.AddAsync(organization);
@@ -139,5 +152,13 @@ namespace OrganizationManagement.Controllers
 
             return RedirectToAction("PostLoginOptions", new { userId = userId });
         }
+
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            return RedirectToAction("Login");
+        }
+
     }
 }
