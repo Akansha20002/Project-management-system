@@ -1,6 +1,26 @@
-@{
-    ViewData["Title"] = "Post Login Options";
+<h2>Your Organizations</h2>
+
+@if (ViewBag.Organizations != null && ViewBag.Organizations.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Organization Name</th>
+                @* <th>Created By</th> *@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var organization in ViewBag.Organizations)
+            {
+                <tr>
+                    <td>@organization.Name</td>
+                    @* <td>@organization.CreatedBy</td>  <!-- You can replace this with the user name if needed --> *@
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-<h2>Login successful</h2>
-<p>User ID: @ViewBag.UserId</p>
-<a class="btn btn-success" asp-controller="Account" asp-action="RegisterName" asp-route-userId="@ViewBag.UserId">Add Organization</a>
+else
+{
+    <p>No organizations found.</p>
+}

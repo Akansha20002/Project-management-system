@@ -24,26 +24,13 @@ namespace OrganizationManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login( AdminDto model)
-        
+        public async Task<IActionResult> Login(AdminDto model)
         {
-             Console.WriteLine("LOGIN ACTION REACHED");
-        //   var abc=  _tables.Admins.ToList();
-
-        //   foreach(var a in abc){
-        //     if(a.Role=="user"){
-        //     Console.WriteLine(a.Name);
-        //     Console.WriteLine(a.Email);
-        //     Console.WriteLine(a.Password);
-        //     }
-        //   }
-             
-        //       Console.WriteLine("1");
+            Console.WriteLine("LOGIN ACTION REACHED");
 
             var user = await _tables.Admins.FirstOrDefaultAsync(a => a.Email == model.Email);
             if (user == null || user.Role != "user")
             {
-                // Console.WriteLine("2");
                 ModelState.AddModelError("", "Invalid email or unauthorized role.");
                 return View(model);
             }
@@ -56,9 +43,9 @@ namespace OrganizationManagement.Controllers
                 ModelState.AddModelError("", "Invalid password.");
                 return View(model);
             }
-              Console.WriteLine("Redirecting to PostLoginOptions");
-           return RedirectToAction("PostLoginOptions", "Account", new { userId = user.Id });
 
+            Console.WriteLine("Redirecting to PostLoginOptions");
+            return RedirectToAction("PostLoginOptions", "Account", new { userId = user.Id });
         }
 
         [HttpGet]
@@ -104,17 +91,53 @@ namespace OrganizationManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> PostLoginOptions(int userId)
         {
-            // Console.WriteLine("1");
             var user = await _tables.Admins.FindAsync(userId);
             if (user == null || user.Role != "user")
             {
-            //   Console.WriteLine("2");
                 return RedirectToAction("Login");
             }
-        //   Console.WriteLine("3");
+
+            // Fetch organizations created by the logged-in user
+            var userOrganizations = await _tables.Organizations
+                .Where(o => o.CreatedBy == userId)
+                .ToListAsync();
+
             ViewBag.UserId = userId;
+            ViewBag.Organizations = userOrganizations;  // Pass organizations to the view
+
             return View();
         }
-        
+
+
+
+        [HttpGet]
+        public IActionResult RegisterName(int userId)
+        {
+            ViewBag.UserId = userId;
+            return View(new OrganizationDTO());
+        }
+
+    
+        [HttpPost]
+        public async Task<IActionResult> RegisterName(int userId, OrganizationDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.UserId = userId;
+                return View(model);
+            }
+
+            var organization = new Organization
+            {
+                Name = model.Name,
+                //Id = userId,
+                CreatedBy=userId
+            };
+
+            await _tables.Organizations.AddAsync(organization);
+            await _tables.SaveChangesAsync();
+
+            return RedirectToAction("PostLoginOptions", new { userId = userId });
+        }
     }
 }
