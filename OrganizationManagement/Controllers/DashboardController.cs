@@ -1,27 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
+using OrganizationManagement.Services.Interface;
 using System.Security.Claims;
+using System.Linq;
 
 namespace OrganizationManagement.Controllers
 {
     [Authorize(AuthenticationSchemes = "CustomCookieAuth")]
     public class DashboardController : Controller
     {
-        private readonly ApplicationDbContext _tables;
+        private readonly IOrganizationService _organizationService;
         private readonly ILogger<DashboardController> _logger;
 
-        public DashboardController(ApplicationDbContext tables, ILogger<DashboardController> logger)
+        public DashboardController(IOrganizationService organizationService, ILogger<DashboardController> logger)
         {
-            _tables = tables;
+            _organizationService = organizationService;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            var orgList = _tables.Organizations
+            var orgList = _organizationService.GetOrganizations()
                 .Select(o => new OrganizationDTO
                 {
                     Id = o.Id,
@@ -49,7 +50,7 @@ namespace OrganizationManagement.Controllers
         {
             ViewBag.ShowForm = true;
 
-            var orgList = _tables.Organizations
+            var orgList = _organizationService.GetOrganizations()
                 .Select(o => new OrganizationDTO
                 {
                     Id = o.Id,
@@ -66,7 +67,10 @@ namespace OrganizationManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RegisterName(OrganizationDTO model)
         {
-            if (_tables.Organizations.Any(o => o.Name == model.Name))
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var exists = _organizationService.OrganizationExists(currentUserId, model.Name);
+            if (exists)
             {
                 TempData["Error"] = "An organization with this name already exists.";
                 return RedirectToAction("Index");
@@ -74,23 +78,19 @@ namespace OrganizationManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
                 var newOrg = new Organization
                 {
                     Name = model.Name,
-                    CreatedBy= currentUserId
-                  
+                    CreatedBy = currentUserId
                 };
 
-                _tables.Organizations.Add(newOrg);
-                _tables.SaveChanges();
+                _organizationService.Add(newOrg);
 
                 TempData["Success"] = "Organization registered successfully!";
                 return RedirectToAction("Index");
             }
 
-            model.Organizations = _tables.Organizations
+            model.Organizations = _organizationService.GetOrganizations()
                 .Select(o => new OrganizationDTO
                 {
                     Id = o.Id,
@@ -100,5 +100,6 @@ namespace OrganizationManagement.Controllers
             ViewBag.ShowForm = true;
             return View("Index", model);
         }
+
     }
 }

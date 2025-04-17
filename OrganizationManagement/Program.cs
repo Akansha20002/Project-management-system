@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 
 using OrganizationManagement.DBContext;
+using OrganizationManagement.Services.Interface;
+using OrganizationManagement.Services;
+using OrganizationManagement.Repo.Contract;
+using OrganizationManagement.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +31,11 @@ builder.Services.AddAuthentication("CustomCookieAuth")
         options.AccessDeniedPath = "/Home/AccessDenied";
         options.SlidingExpiration = true;
     });
+
+
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 
 
 
