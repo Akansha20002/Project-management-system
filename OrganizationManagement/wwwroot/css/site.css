@@ -18,8 +18,9 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-image: url('/images/bg.jpg') ;
 }
+
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
@@ -29,3 +30,21 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+.footer {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-top: 1px solid #dee2e6;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
+}
+
+    .footer small {
+        font-size: 0.9rem;
+    }
+ 
+
+
+

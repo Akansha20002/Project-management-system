@@ -8,12 +8,154 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/OrganizationManagement.styles.css" asp-append-version="true" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - OrganizationManagement</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+        <style>
+
+
+       
+        
+        body {
+            background: url('/images/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        /*.btn-login-link {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white !important;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-login-link:hover {
+            background: linear-gradient(to right, #0056b3, #003f7f);
+            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.5);
+            transform: translateY(-2px);
+        }*/
+
+        
+        /*.btn-create-org {
+            background: linear-gradient(to right, #6610f2, #5a00d1);
+            color: #fff !important;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem;
+            border-radius: 30px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(102, 16, 242, 0.3);
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-create-org:hover {
+            background: linear-gradient(to right, #218838, #1e7e34);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
+        }*/
+
+
+        .btn-login-link,.btn-create-org, .btn-login, .btn-register {
+            padding: 0.45rem 1.2rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease-in-out;
+            border: none;
+        }
+
+        .btn-login, .btn-login-link {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+            .btn-login, .btn-login-link:hover {
+                background: linear-gradient(to right, #0056b3, #003f7f);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 18px rgba(0, 123, 255, 0.4);
+            }
+
+        .btn-register, .btn-create-org {
+            background: linear-gradient(to right, #28a745, #218838);
+            color: white;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+            .btn-register, .btn-create-org:hover {
+                background: linear-gradient(to right, #218838, #1e7e34);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
+            }
+    
+
+    
+
+
+
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 1);
+            color: black;
+            padding: 1px;
+        }
+
+        .nav-link, .navbar-brand {
+            color: #333 !important;
+            font-weight: bold;
+        }
+
+            .nav-link:hover {
+                color: #007bff !important;
+            }
+    </style>
+
+    
+
+   
+
+        
+
+            
+    
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-body-secondary border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OrganizationManagement</a>
+           
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -36,8 +178,9 @@
                     else
                     {
                     <div id="loginForm">
-                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Login">Login</a>
-                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Register">Register</a>
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-login me-2">🔐 Login</a>
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-register">📝 Register</a>
+
                     </div>
                     
                     }
@@ -45,6 +188,8 @@
             </div>
         </nav>
     </header>
+    
+
 
     <div class="container">
         <main role="main" class="pb-3">
@@ -54,15 +199,20 @@
 
     @RenderSection("Script", required: false)
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - OrganizationManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+   <footer class="footer mt-auto py-3">
+    <div class="container text-center">
+        <small class="text-muted">
+            &copy; 2025 <strong>Project Management System</strong> — Built with 
+            <span style="color: #007bff;">&#10084;</span> in ASP.NET Core.
+        </small>
+    </div>
+</footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
 </body>
 </html>

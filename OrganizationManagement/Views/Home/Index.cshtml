@@ -5,9 +5,15 @@
 <div class="text-center">
     <h1 class="display-4">Project Management</h1>
 
-    <a href="#" data-bs-toggle="modal" data-bs-target="#authModal">Create Organization</a>
-    <br />
-    <a asp-action="Login">Login</a>
+  
+   
+    <a href="#" class="btn btn-create-org" data-bs-toggle="modal" data-bs-target="#authModal">
+        🏢 Create Organization
+    </a>
+    
+    
+    <a asp-action="Login" class="btn btn-login-link">🔐 Login</a>
+
 </div>
 
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
@@ -28,3 +34,4 @@
         </div>
     </div>
 </div>
+
