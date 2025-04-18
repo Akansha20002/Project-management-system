@@ -1,34 +1,57 @@
-
 @{
     var userId = ViewBag.UserId;
+    var userName = ViewBag.UserName ?? Context.Request.Cookies["UserName"];
     var organizations = ViewBag.Organizations as List<OrganizationManagement.Models.Organization>;
 }
 
-<h2>Welcome User!</h2>
+<h2>Welcome, @userName!</h2>
 
 <a class="btn btn-primary" href="@Url.Action("RegisterName", "Account", new { userId = userId })">
-    ? Add Organization
+    ➕ Add Organization
 </a>
 
 <a class="btn btn-danger" href="@Url.Action("Logout", "Account")" style="margin-left: 10px;">
-    ?? Logout
+    🔐 Logout
 </a>
 
-<br />
-<br />
+<br /><br />
 
 <h3>Your Organizations</h3>
+
 @if (organizations != null && organizations.Any())
 {
-    <ul class="list-group">
+    <div class="row">
         @foreach (var org in organizations)
         {
-            <li class="list-group-item">@org.Name</li>
-        }
-    </ul>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@org.Name</h5>
+                        <p class="card-text">
+                            Organization ID: @org.Id
+                        </p>
+                        <a href="@Url.Action("Dashboard", "Organization", new { organizationId = org.Id })" class="btn btn-outline-primary">Go to Dashboard</a>
 
+                        <form asp-action="DeleteOrganization" asp-controller="Account" method="post" class="mt-2" onsubmit="return confirmDelete(event)">
+                            <input type="hidden" name="id" value="@org.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 else
 {
     <p>No organizations found.</p>
 }
+
+<script type="text/javascript">
+    function confirmDelete(event) {
+        var confirmation = confirm("Are you sure you want to delete this organization?");
+        if (!confirmation) {
+            event.preventDefault();  // Prevent the form submission if the user cancels
+        }
+    }
+</script>
