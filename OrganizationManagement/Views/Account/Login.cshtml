@@ -4,42 +4,50 @@
     ViewData["Title"] = "User Login";
 }
 
-<div class="container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="col-md-5">
-        <div class="card shadow-lg rounded-4 border-0">
+<!-- Full-page Centered Container -->
+<div class="container d-flex align-items-center justify-content-center min-vh-100" style="background: url('/images/bg.jpg') no-repeat center center fixed; background-size: cover;">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-white bg-opacity-90">
             <div class="card-body p-5">
-                <h3 class="text-center mb-4">User Login</h3>
+                <!-- Title -->
+                <h2 class="text-center mb-4 fw-bold text-primary">User Login</h2>
 
+                <!-- Display Error -->
                 @if (TempData["Error"] != null)
                 {
-                    <div class="alert alert-danger text-center">
+                    <div class="alert alert-danger text-center rounded-3">
                         @TempData["Error"]
                     </div>
                 }
 
-                <form id="loginForm" asp-action="Login" method="post">
+                <!-- Login Form -->
+                <form asp-action="Login" method="post" id="loginForm">
                     <div class="form-floating mb-3">
-                        <input asp-for="Email" class="form-control" placeholder="Email" />
-                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control rounded-3" placeholder="Email" />
+                        <label asp-for="Email">Email</label>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
 
                     <div class="form-floating mb-4">
-                        <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
-                        <label asp-for="Password"></label>
+                        <input asp-for="Password" type="password" class="form-control rounded-3" placeholder="Password" />
+                        <label asp-for="Password">Password</label>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3" id="loginButton">
+                    <button type="submit" class="btn btn-login w-100 mb-3">
                         Login
                     </button>
                 </form>
 
+                <!-- Link to Register -->
                 <div class="text-center">
                     <p class="mb-0">
                         Don't have an account?
-                        <a href="@Url.Action("Register", "Account")" class="text-decoration-none fw-bold">Sign up</a>
+                        <a href="@Url.Action("Register", "Account")" class="fw-semibold text-decoration-none text-success">Sign up</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

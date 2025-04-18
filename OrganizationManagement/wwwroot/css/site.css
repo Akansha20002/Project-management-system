@@ -1,4 +1,18 @@
+/* --------------------------------
+   Base Styles
+--------------------------------- */
+body {
+  background: url('/images/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
 html {
+  position: relative;
+  min-height: 100%;
   font-size: 14px;
 }
 
@@ -8,24 +22,158 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+/* --------------------------------
+   Container & Cards
+--------------------------------- */
+.container {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.bg-opacity-90 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* --------------------------------
+   Buttons
+--------------------------------- */
+.btn-login,
+.btn-login-link,
+.btn-register,
+.btn-create-org {
+  padding: 0.45rem 1.2rem;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: all 0.3s ease-in-out;
+  border: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* Login Buttons */
+.btn-login,
+.btn-login-link {
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-login:hover,
+.btn-login-link:hover {
+  background: linear-gradient(to right, #0056b3, #003f7f);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 123, 255, 0.4);
+}
+
+/* Register / Create Organization Buttons */
+.btn-register,
+.btn-create-org {
+  background: linear-gradient(to right, #28a745, #218838);
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-register:hover,
+.btn-create-org:hover {
+  background: linear-gradient(to right, #218838, #1e7e34);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
+}
+
+/* Focus Styles */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+  border-color: #80bdff;
+}
+
+/* --------------------------------
+   Navbar
+--------------------------------- */
+.navbar {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link,
+.navbar-brand {
+  color: #333 !important;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  color: #007bff !important;
+}
+
+/* --------------------------------
+   Footer
+--------------------------------- */
+/* footer,
+.footer {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid #dee2e6;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+  color: black;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
+} */
+.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #f1f1f1;
+  background: transparent;
+  z-index: 1000;
+  padding: 5px 0;
+  pointer-events: none;
+}
+.custom-footer {
+  background-color: rgba(248, 249, 250, 0.9);
+  color: #212529;
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid #dee2e6;
+  text-align: center;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
   position: relative;
-  min-height: 100%;
+  width: 100%;
+  z-index: 1;
 }
 
-body {
-  margin-bottom: 60px;
+.footer small {
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-block;
 }
-
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+/* --------------------------------
+   Form Floating Labels
+--------------------------------- */
+.form-floating > .form-control::placeholder,
+.form-floating > .form-control-plaintext::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating > .form-control:focus::placeholder,
+.form-floating > .form-control-plaintext:focus::placeholder {
   text-align: start;
 }

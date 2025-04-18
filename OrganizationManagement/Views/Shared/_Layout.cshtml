@@ -29,15 +29,15 @@
                         <div id="logoutForm">
                         
                             <form method="post" asp-controller="Home" asp-action="Logout" id="logoutForm">
-                                <button type="submit" id="logoutBtn" class="btn btn-outline-danger">Logout</button>
+                                <button type="submit" id="logoutBtn" class="btn btn-outline-danger">🔐Logout</button>
                             </form>
                         </div>
                     }
                     else
                     {
                     <div id="loginForm">
-                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Login">Login</a>
-                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Register">Register</a>
+                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Login"  class="btn btn-login me-2">🔐 Login</a>
+                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Register" class="btn btn-register">📝 Register</a>
                     </div>
                     
                     }
@@ -54,11 +54,24 @@
 
     @RenderSection("Script", required: false)
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - OrganizationManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+     <!-- <footer class="footer mt-auto py-3">
+    <div class="container text-center">
+        <small class="text-muted">
+            &copy; 2025 <strong>Project Management System</strong> — Built with 
+            <span style="color: #007bff;">&#10084;</span> in ASP.NET Core.
+        </small>
+    </div>
+</footer> -->
+<br>
+<footer class="footer mt-auto">
+    <div class="container text-center">
+        <small class="text-black-50">
+            &copy; 2025 <strong>Project Management System</strong> — Built with 
+            <span style="color: #007bff;">&#10084;</span> in ASP.NET Core.
+        </small>
         </div>
-    </footer>
+</footer>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
