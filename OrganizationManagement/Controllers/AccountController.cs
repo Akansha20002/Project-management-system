@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using OrganizationManagement.DBContext;
@@ -27,6 +27,8 @@ namespace OrganizationManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AdminDto model)
         {
+
+
             var user = await _tables.Admins.FirstOrDefaultAsync(a => a.Email == model.Email);
             if (user == null || user.Role != "user")
             {
@@ -43,7 +45,9 @@ namespace OrganizationManagement.Controllers
                 return View(model);
             }
 
+
             return RedirectToAction("PostLoginOptions", new { userId = user.Id });
+
         }
 
         [HttpGet]
@@ -95,6 +99,7 @@ namespace OrganizationManagement.Controllers
                 return RedirectToAction("Login");
             }
 
+
             ViewBag.UserId = userId;
 
             var organizations = await _tables.Organizations
@@ -102,8 +107,10 @@ namespace OrganizationManagement.Controllers
                                              .ToListAsync();
             ViewBag.Organizations = organizations;
 
+
             return View();
         }
+
 
         [HttpGet]
         public IActionResult RegisterName(int userId)
@@ -111,6 +118,7 @@ namespace OrganizationManagement.Controllers
             ViewBag.UserId = userId;
             return View(new OrganizationDTO());
         }
+
 
         [HttpPost]
         public async Task<IActionResult> RegisterName(int userId, OrganizationDTO model)
@@ -136,6 +144,7 @@ namespace OrganizationManagement.Controllers
             {
                 Name = model.Name,
                 CreatedBy = userId
+
             };
 
             await _tables.Organizations.AddAsync(organization);
@@ -144,10 +153,12 @@ namespace OrganizationManagement.Controllers
             return RedirectToAction("PostLoginOptions", new { userId = userId });
         }
 
+
         [HttpGet]
         public IActionResult Logout()
         {
             return RedirectToAction("Login");
         }
+
     }
 }
