@@ -65,6 +65,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddAuthentication("CustomCookieAuth")
     .AddCookie("CustomCookieAuth", options =>
     {
@@ -78,7 +79,7 @@ builder.Services.AddAuthentication("CustomCookieAuth")
         options.AccessDeniedPath = "/Home/AccessDenied";
         options.SlidingExpiration = true;
     });
-
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

@@ -44,7 +44,7 @@ namespace OrganizationManagement.Controllers
      {
          new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
          new Claim(ClaimTypes.Name, user.Name),
-         new Claim("Role", "Admin")
+         new Claim("Role", user.Role)
      };
 
             var claimsIdentity = new ClaimsIdentity(claims, "CustomCookieAuth");
@@ -68,7 +68,7 @@ namespace OrganizationManagement.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("CustomCookieAuth");
-            return RedirectToAction("Login");
+            return RedirectToAction("Index");
         }
 
     }

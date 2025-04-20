@@ -1,81 +1,68 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - OrganizationManagement</title>
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/OrganizationManagement.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-body-secondary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OrganizationManagement</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                       
-                    </ul>
 
-                   @if (User.Identity.IsAuthenticated) 
+                <div class="collapse navbar-collapse d-flex justify-content-end">
+                    <ul class="navbar-nav flex-grow-1"></ul>
+
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <span class="me-2">@User.Identity.Name</span>
-                        <div id="logoutForm">
-                        
-                            <form method="post" asp-controller="Home" asp-action="Logout" id="logoutForm">
-                                <button type="submit" id="logoutBtn" class="btn btn-outline-danger">🔐Logout</button>
-                            </form>
-                        </div>
+                        <!-- Admin Logged In -->
+                        <span class="me-2 text-primary fw-bold">👑 @User.Identity.Name (Admin)</span>
+                        <form method="post" asp-controller="Home" asp-action="Logout" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger">🔐 Logout</button>
+                        </form>
+                    }
+                    else if (Context.Request.Cookies["UserId"] != null)
+                    {
+                        <!-- Normal User Logged In via Cookie -->
+                        var userName = Context.Request.Cookies["UserName"];
+                        <span class="me-2 text-success fw-bold">🙋‍♀️ @userName (User)</span>
+                        <form method="get" asp-controller="Account" asp-action="Logout" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger">🔐 Logout</button>
+                        </form>
                     }
                     else
                     {
-                    <div id="loginForm">
-                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Login"  class="btn btn-login me-2">🔐 Login</a>
-                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Register" class="btn btn-register">📝 Register</a>
-                    </div>
-                    
+                        <!-- No User Logged In -->
+                        <div id="loginForm">
+                            <a class="btn btn-outline-primary me-2" asp-controller="Home" asp-action="Login">🔐 Login (Admin)</a>
+                           
+                        </div>
                     }
                 </div>
             </div>
         </nav>
     </header>
-
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    @RenderSection("Script", required: false)
-
-     <!-- <footer class="footer mt-auto py-3">
-    <div class="container text-center">
-        <small class="text-muted">
-            &copy; 2025 <strong>Project Management System</strong> — Built with 
-            <span style="color: #007bff;">&#10084;</span> in ASP.NET Core.
-        </small>
-    </div>
-</footer> -->
-<br>
-@* <footer class="footer mt-auto py-3 bg-light"> *@
-@*     <div class="container text-center"> *@
-@*         <small class="text-black-50"> *@
-@*             &copy; 2025 <strong>Project Management System</strong> — Built with  *@
-@*             <span style="color: #007bff;">&#10084;</span> in ASP.NET Core. *@
-@*         </small> *@
-@*         </div> *@
-@* </footer> *@
-
+   
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
