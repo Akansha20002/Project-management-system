@@ -42,14 +42,14 @@ namespace OrganizationManagement.Controllers
                 ProjectName = p.ProjectName,
                 Status = p.Status,
                 Description = p.Description,
-                StartDate = p.StartDate,
-                EndDate = p.EndDate,
+                StartDate = p.StartDate.ToUniversalTime(),
+                EndDate = p.EndDate.ToUniversalTime(),
                 OrganizationId = p.OrganizationId,
-                TestPlans = p.TestPlans.Select(t => new TestPlanDTO
-                {
-                    TestPlanId = t.TestPlanId,
-                    Name = t.Name
-                }).ToList()
+                // TestPlans = p.TestPlans.Select(t => new TestPlanDTO
+                // {
+                //     TestPlanId = t.TestPlanId,
+                //     Name = t.Name
+                // }).ToList()
             }).ToList();
 
             // Pass the data to the view

@@ -1,35 +1,51 @@
 @model OrganizationManagement.DTO.ProjectDTO
 
-<h2>Add New Project</h2>
+@{
+    ViewData["Title"] = "Add Project";
+}
+
+<h2>Add Project</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
 
 <form asp-action="AddProject" method="post">
-    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="OrganizationId" />
 
     <div>
         <label asp-for="ProjectName"></label>
-        <input asp-for="ProjectName" />
+        <input asp-for="ProjectName" class="form-control" />
     </div>
 
     <div>
         <label asp-for="Status"></label>
-        <input asp-for="Status" />
+        <input asp-for="Status" class="form-control" />
     </div>
 
     <div>
         <label asp-for="Description"></label>
-        <textarea asp-for="Description"></textarea>
+        <textarea asp-for="Description" class="form-control"></textarea>
     </div>
 
     <div>
         <label asp-for="StartDate"></label>
-        <input asp-for="StartDate" type="date" />
+        <input asp-for="StartDate" type="date" class="form-control" />
     </div>
 
     <div>
         <label asp-for="EndDate"></label>
-        <input asp-for="EndDate" type="date" />
+        <input asp-for="EndDate" type="date" class="form-control" />
     </div>
 
-    <button type="submit">Add Project</button>
+    <br />
+    <button type="submit" class="btn btn-success">Add Project</button>
 </form>

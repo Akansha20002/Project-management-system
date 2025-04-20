@@ -27,6 +27,6 @@ namespace OrganizationManagement.DTO
         public int OrganizationId { get; set; }
 
       
-        public ICollection<TestPlanDTO> TestPlans { get; set; }
+       public ICollection<TestPlanDTO>? TestPlans { get; set; }
     }
 }
