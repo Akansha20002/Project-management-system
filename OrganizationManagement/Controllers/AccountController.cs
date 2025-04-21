@@ -26,7 +26,7 @@ namespace OrganizationManagement.Controllers
             if (Request.Cookies.ContainsKey("UserId"))
             {
                 int userId = int.Parse(Request.Cookies["UserId"]);
-                return RedirectToAction("PostLoginOptions", new { userId = userId });
+                return RedirectToAction("UserDashboard", new { userId = userId });
             }
 
             return View(new AdminDto());
@@ -62,7 +62,7 @@ namespace OrganizationManagement.Controllers
                 Expires = DateTimeOffset.UtcNow.AddDays(1)
             });
 
-            return RedirectToAction("PostLoginOptions", new { userId = user.Id });
+            return RedirectToAction("UserDashboard", new { userId = user.Id });
         }
 
         [HttpGet]
@@ -120,7 +120,7 @@ namespace OrganizationManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PostLoginOptions(int userId)
+        public async Task<IActionResult> UserDashboard(int userId)
         {
             var user = await _tables.Admins.FindAsync(userId);
             if (user == null || user.Role != "user")

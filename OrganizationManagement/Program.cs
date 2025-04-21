@@ -55,6 +55,8 @@
 // app.Run();
 using Microsoft.EntityFrameworkCore;
 using OrganizationManagement.DBContext;
+using OrganizationManagement.Services.Interfaces;
+using OrganizationManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +82,7 @@ builder.Services.AddAuthentication("CustomCookieAuth")
         options.SlidingExpiration = true;
     });
 builder.Services.AddHttpContextAccessor();
+//builder.services.AddScoped<IAccountService, AccountService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

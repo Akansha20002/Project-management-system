@@ -10,11 +10,8 @@
     ➕ Add Organization
 </a>
 
-<a class="btn btn-danger" href="@Url.Action("Logout", "Account")" style="margin-left: 10px;">
-    🔐 Logout
-</a>
-
-<br /><br />
+<br />
+<br />
 
 <h3>Your Organizations</h3>
 
@@ -30,8 +27,8 @@
                         <p class="card-text">
                             Organization ID: @org.Id
                         </p>
-                         <a href="@Url.Action("Dashboard", "Organization", new { organizationId = org.Id })" class="btn btn-outline-primary">Go to Dashboard</a> 
-                         
+                        <a href="@Url.Action("Dashboard", "Organization", new { organizationId = org.Id })" class="btn btn-outline-primary">Go to Dashboard</a>
+
                         <form asp-action="DeleteOrganization" asp-controller="Account" method="post" class="mt-2" onsubmit="return confirmDelete(event)">
                             <input type="hidden" name="id" value="@org.Id" />
                             <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
@@ -51,7 +48,7 @@ else
     function confirmDelete(event) {
         var confirmation = confirm("Are you sure you want to delete this organization?");
         if (!confirmation) {
-            event.preventDefault();  // Prevent the form submission if the user cancels
+            event.preventDefault();
         }
     }
 </script>
