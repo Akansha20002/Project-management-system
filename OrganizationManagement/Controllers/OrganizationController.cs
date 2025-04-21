@@ -19,23 +19,23 @@ namespace OrganizationManagement.Controllers
 
         public async Task<IActionResult> Dashboard(int organizationId)
         {
-            // Get the current user ID from cookies
+
             if (!Request.Cookies.TryGetValue("UserId", out string userIdStr) || !int.TryParse(userIdStr, out int userId))
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            // Fetch organization with projects and check if it's owned by this user
+         
             var organization = await _tables.Organizations
-                .Include(o => o.Projects) // Load projects
+                .Include(o => o.Projects) 
                 .FirstOrDefaultAsync(o => o.Id == organizationId && o.CreatedBy == userId);
 
             if (organization == null)
             {
-                return Unauthorized(); // Prevent access if not their organization
+                return Unauthorized(); 
             }
 
-            // Map the Projects to ProjectDTO
+
             var projectDTOs = organization.Projects.Select(p => new ProjectDTO
             {
                 ProjectId = p.ProjectId,
@@ -52,12 +52,12 @@ namespace OrganizationManagement.Controllers
                 // }).ToList()
             }).ToList();
 
-            // Pass the data to the view
+           
             ViewBag.OrganizationId = organizationId;
             ViewBag.UserName = Request.Cookies["UserName"];
-            return View(projectDTOs); // Pass DTOs instead of Entity
+            return View(projectDTOs); 
         }
 
-        // Add more actions like Create, Delete, etc.
+     
     }
 }

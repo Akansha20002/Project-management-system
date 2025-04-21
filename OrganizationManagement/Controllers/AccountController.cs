@@ -22,7 +22,7 @@ namespace OrganizationManagement.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            // If user is already logged in, redirect to dashboard
+
             if (Request.Cookies.ContainsKey("UserId"))
             {
                 int userId = int.Parse(Request.Cookies["UserId"]);
@@ -51,7 +51,7 @@ namespace OrganizationManagement.Controllers
                 return View(model);
             }
 
-            // Set cookies
+ 
             Response.Cookies.Append("UserId", user.Id.ToString(), new CookieOptions
             {
                 Expires = DateTimeOffset.UtcNow.AddDays(1)
@@ -68,7 +68,7 @@ namespace OrganizationManagement.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            // Redirect to dashboard if already logged in
+
             if (Request.Cookies.ContainsKey("UserId"))
             {
                 int userId = int.Parse(Request.Cookies["UserId"]);
@@ -81,7 +81,7 @@ namespace OrganizationManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(AdminDto model)
         {
-            // Redirect to dashboard if already logged in
+      
             if (Request.Cookies.ContainsKey("UserId"))
             {
                 int userId = int.Parse(Request.Cookies["UserId"]);

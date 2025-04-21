@@ -59,7 +59,7 @@ namespace OrganizationManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check for duplicate project name in the same organization
+               
                 bool projectExists = _tables.Projects.Any(p =>
                     p.OrganizationId == projectDTO.OrganizationId &&
                     p.ProjectName.Trim().ToLower() == projectDTO.ProjectName.Trim().ToLower());
