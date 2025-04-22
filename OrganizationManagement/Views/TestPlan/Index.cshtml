@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ICollection<OrganizationManagement.Models.TestPlan>
+
+@{
+    ViewData["Title"] = "Manage Test Plans";
+}
+
+<h2>Test Plans</h2>
+
+<!-- Display the user's Test Plans -->
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var testPlan in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@testPlan.Name</h5>
+                        <p class="card-text"><strong>Objective:</strong> @testPlan.Objective</p>
+                        <p class="card-text"><strong>Created By:</strong> @testPlan.CreatedBy</p>
+                        <p class="card-text"><strong>Strategy:</strong> @testPlan.Strategy</p>
+
+                        <!-- Button to Edit a Test Plan -->
+
+                     
+
+
+                        <!-- Button to Delete a Test Plan -->
+                        <form asp-action="Delete" asp-controller="TestPlan" method="post" class="mt-2" onsubmit="return confirmDelete(event)">
+                            <input type="hidden" name="testPlanId" value="@testPlan.TestPlanId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger"> Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <!-- Add New Test Plan button (this is now outside the foreach loop) -->
+    <a asp-action="Add" asp-controller="TestPlan" asp-route-projectId="@Model.First().ProjectId" class="btn btn-outline-success mt-3">
+        + Add New Test Plan
+    </a>
+}
+else
+{
+    <p>No test plans available.</p>
+}
+
+<!-- Button to Add a New Test Plan -->
+
+@* <a asp-action="Add" asp-controller="TestPlan" asp-route-projectId="@testPlan.ProjectId" class="btn btn-outline-success mt-3"> *@
+@*     + Add New Test Plan *@
+@* </a> *@
+
+
+<script type="text/javascript">
+    function confirmDelete(event) {
+        if (!confirm("Are you sure you want to delete this test plan?")) {
+            event.preventDefault();
+        }
+    }
+</script>
