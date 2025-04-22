@@ -2,12 +2,33 @@
 
 <h2>@Model.ProjectName</h2>
 
-<p><strong>Status:</strong> @Model.Status</p>
+<p>
+    <strong>Status:</strong>
+    @if (Model.IsCompleted)
+    {
+        <span style="color:green; font-weight:bold;">Completed ?</span>
+    }
+    else if (Model.IsIncomplete)
+    {
+        <span style="color:red; font-weight:bold;">Incomplete ?</span>
+    }
+    else if (Model.IsPastDeadline)
+    {
+        <span style="color:orange; font-weight:bold;">Deadline Passed - Now Incomplete ??</span>
+    }
+    else
+    {
+        <span style="color:blue; font-weight:bold;">In Progress ?</span>
+    }
+</p>
+
 <p><strong>Description:</strong> @Model.Description</p>
 <p><strong>Start Date:</strong> @Model.StartDate.ToString("yyyy-MM-dd")</p>
 <p><strong>End Date:</strong> @Model.EndDate.ToString("yyyy-MM-dd")</p>
 
-<h3>Test Plans</h3>
+<hr />
+
+<h3>?? Test Plans</h3>
 @if (Model.TestPlans != null && Model.TestPlans.Any())
 {
     <ul>
@@ -19,12 +40,16 @@
 }
 else
 {
-    <p>No test plans found for this project.</p>
+    <p style="color:gray;">No test plans found for this project.</p>
 }
+
+<hr />
 
 <form asp-action="DeleteProject" method="post">
     <input type="hidden" name="projectId" value="@Model.ProjectId" />
-    <button type="submit" onclick="return confirm('Are you sure you want to delete this project?')">Delete Project</button>
+    <button type="submit"
+            style="background-color:#dc3545; color:white; padding:8px 12px; border:none; border-radius:4px;"
+            onclick="return confirm('Are you sure you want to delete this project?')">
+        ?? Delete Project
+    </button>
 </form>
-
-

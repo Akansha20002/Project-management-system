@@ -26,7 +26,15 @@ namespace OrganizationManagement.DTO
         
         public int OrganizationId { get; set; }
 
-      
-       public ICollection<TestPlanDTO>? TestPlans { get; set; }
+
+        public List<TestPlanDTO>? TestPlans { get; set; }
+
+        public bool IsCompleted => Status?.ToLower() == "completed";
+        public bool IsIncomplete => Status?.ToLower() == "incomplete";
+        public bool IsPastDeadline => !IsCompleted && EndDate < DateTime.UtcNow;
+        public List<ProjectDTO> CompletedProjects { get; set; } = new();
+        public List<ProjectDTO> IncompleteProjects { get; set; } = new();
+        public List<ProjectDTO> PendingProjects { get; set; } = new();
+
     }
 }
