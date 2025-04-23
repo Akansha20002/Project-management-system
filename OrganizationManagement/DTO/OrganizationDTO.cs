@@ -16,5 +16,8 @@ namespace OrganizationManagement.DTO
         public ICollection<ProjectDTO>? Projects { get; set; }
 
         public List<OrganizationDTO> Organizations { get; set; } = new List<OrganizationDTO>();
+        
+            
+        
     }
 }
