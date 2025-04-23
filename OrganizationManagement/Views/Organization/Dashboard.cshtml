@@ -28,6 +28,10 @@
                             <input type="hidden" name="projectId" value="@project.ProjectId" />
                             <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
                         </form>
+                        <form asp-action="EditProject" asp-controller="Project" method="post" class="mt-2" >
+                            <input type="hidden" name="projectId" value="@project.ProjectId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Edit Project</button>
+                        </form>
                     </div>
                 </div>
             </div>

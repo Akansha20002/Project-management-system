@@ -104,5 +104,62 @@ namespace OrganizationManagement.Controllers
 
             return RedirectToAction("Dashboard", "Organization", new { organizationId });
         }
+        [HttpGet]
+        public IActionResult EditProject(int projectId)
+        {
+            var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+
+            if (project == null) return NotFound();
+
+            var projectDTO = new ProjectDTO
+            {
+                ProjectId = project.ProjectId,
+                ProjectName = project.ProjectName,
+                Status = project.Status,
+                Description = project.Description,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
+                OrganizationId = project.OrganizationId
+            };
+
+            return View(projectDTO);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditProject(ProjectDTO projectDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == projectDTO.ProjectId);
+
+                if (project == null) return NotFound();
+
+                // Optional: Check for duplicate project name
+                bool projectExists = _tables.Projects.Any(p =>
+                    p.OrganizationId == projectDTO.OrganizationId &&
+                    p.ProjectId != projectDTO.ProjectId && // Exclude current project
+                    p.ProjectName.Trim().ToLower() == projectDTO.ProjectName.Trim().ToLower());
+
+                if (projectExists)
+                {
+                    ModelState.AddModelError("ProjectName", "A project with the same name already exists in this organization.");
+                    return View(projectDTO);
+                }
+
+                // Update fields
+                project.ProjectName = projectDTO.ProjectName;
+                project.Status = projectDTO.Status;
+                project.Description = projectDTO.Description;
+                project.StartDate = DateTime.SpecifyKind(projectDTO.StartDate, DateTimeKind.Utc);
+                project.EndDate = DateTime.SpecifyKind(projectDTO.EndDate, DateTimeKind.Utc);
+
+                _tables.SaveChanges();
+
+                return RedirectToAction("Dashboard", "Organization", new { organizationId = project.OrganizationId });
+            }
+
+            return View(projectDTO);
+        }
+
     }
 }
