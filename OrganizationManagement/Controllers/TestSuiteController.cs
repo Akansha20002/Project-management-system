@@ -1,52 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
-namespace OrganizationManagement.Controllers
+public class TestSuiteController : Controller
 {
-    public class TestSuiteController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public TestSuiteController(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public TestSuiteController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    // GET: Create Test Suite
+    public IActionResult Create(int testPlanId)
+    {
+        var model = new TestSuiteDTO { TestPlanId = testPlanId };
+        return View(model);
+    }
 
-        // GET: TestSuite/Create
-        public IActionResult Create(int testPlanId)
+    // POST: Create Test Suite
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(TestSuiteDTO model)
+    {
+        if (ModelState.IsValid)
         {
-            ViewBag.TestPlanId = testPlanId;
-            return View();
-        }
-
-        // POST: TestSuite/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TestSuiteDTO testSuiteDto)
-        {
-            if (ModelState.IsValid)
+            var testSuite = new TestSuite
             {
-                // Map the DTO to the entity (TestSuite)
-                var testSuite = new TestSuite
-                {
-                    Name = testSuiteDto.Name,
-                    Description = testSuiteDto.Description,
-                    TestPlanId = testSuiteDto.TestPlanId
-                };
+                Name = model.Name,
+                Description = model.Description,
+                TestPlanId = model.TestPlanId
+            };
 
-                // Add the test suite to the database
-                _context.Add(testSuite);
-                await _context.SaveChangesAsync();
+            _context.TestSuites.Add(testSuite);
+            await _context.SaveChangesAsync();
 
-                // Redirect to the index page of the test plan (or wherever you want to redirect)
-                return RedirectToAction("Index", "TestPlan", new { id = testSuite.TestPlanId });
-            }
-
-            // If validation fails, return the view with the same data
-            return View(testSuiteDto);
+            return RedirectToAction("Details", "TestPlan", new { id = model.TestPlanId });
         }
+
+        return View(model);
     }
 }
