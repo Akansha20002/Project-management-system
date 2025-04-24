@@ -35,14 +35,22 @@
                             <input type="hidden" name="testPlanId" value="@testPlan.TestPlanId" />
                             <button type="submit" class="btn btn-sm btn-outline-danger"> Delete</button>
                         </form>
+
+                     
                     </div>
                 </div>
             </div>
         }
+
+
+
     </div>
     <!-- Add New Test Plan button (this is now outside the foreach loop) -->
     <a asp-action="Add" asp-controller="TestPlan" asp-route-projectId="@Model.First().ProjectId" class="btn btn-outline-success mt-3">
         + Add New Test Plan
+    </a>
+    <a asp-action="ProjectDashboard" asp-controller="Project" asp-route-projectId="@Model.First().ProjectId" class="btn btn-outline-success mt-3">
+        Back To Dashboard
     </a>
 }
 else

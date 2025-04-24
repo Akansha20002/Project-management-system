@@ -86,6 +86,8 @@ builder.Services.AddAuthentication("CustomCookieAuth")
     });
 builder.Services.AddHttpContextAccessor();
 //builder.services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITestSuitesService, TestSuitesService>();
+builder.Services.AddScoped<ITestSuiteRepository, TestSuitesRepository>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

@@ -9,7 +9,9 @@ namespace OrganizationManagement.Repo.Contract
         TestPlan Update(TestPlan testPlans);
 
         TestPlan Delete(TestPlan testPlans);
-
-
+        //TestSuite Add(TestSuite testSuites);
+        //TestSuite Delete(TestSuite testSuites);
+        //ICollection<TestSuite> GetTestPlansByUserId(int userId);
+        //TestSuite Update(TestSuite testSuites);
     }
 }

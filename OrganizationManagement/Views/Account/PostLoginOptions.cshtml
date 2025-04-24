@@ -27,7 +27,7 @@
                         <p class="card-text">
                             Organization ID: @org.Id
                         </p>
-                        <a href="@Url.Action("Dashboard", "Organization", new { organizationId = org.Id })" class="btn btn-outline-primary">Go to Dashboard</a>
+                        <a href="@Url.Action("Dashboard", "Organization", new { organizationId = org.Id })" class="btn btn-outline-primary">Go to Projects</a>
 
                         <form asp-action="DeleteOrganization" asp-controller="Account" method="post" class="mt-2" onsubmit="return confirmDelete(event)">
                             <input type="hidden" name="id" value="@org.Id" />
