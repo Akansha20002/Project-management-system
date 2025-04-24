@@ -24,7 +24,7 @@ namespace OrganizationManagement.DTO
             public int ProjectId { get; set; }
 
             // Optionally, you can include TestSuites here
-            public ICollection<TestSuiteDTO> TestSuites { get; set; }
+            public ICollection<TestSuiteDTO>? TestSuites { get; set; }
         }
 
     

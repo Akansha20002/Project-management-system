@@ -16,7 +16,7 @@ namespace OrganizationManagement.Controllers
             _tables = tables;
         }
 
-        // Show details of a single project with its test plans (optional)
+     
         public IActionResult ProjectDashboard(int projectId)
         {
             var project = _tables.Projects
@@ -45,7 +45,7 @@ namespace OrganizationManagement.Controllers
             return View(projectDTO);
         }
 
-        // Show add project form
+   
         [HttpGet]
         public IActionResult AddProject(int organizationId)
         {
@@ -53,7 +53,7 @@ namespace OrganizationManagement.Controllers
             return View(dto);
         }
 
-        // Handle form submission for adding a new project
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddProject(ProjectDTO projectDTO)
@@ -105,7 +105,7 @@ namespace OrganizationManagement.Controllers
             return View(projectDTO);
         }
 
-        // Handle project deletion
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteProject(int projectId)
@@ -122,7 +122,6 @@ namespace OrganizationManagement.Controllers
             return RedirectToAction("Dashboard", "Organization", new { organizationId });
         }
 
-        // Show all projects by organization and group them by status
         public IActionResult ProjectDashboardByOrganization(int organizationId)
         {
             var projects = _tables.Projects
@@ -134,7 +133,7 @@ namespace OrganizationManagement.Controllers
 
             foreach (var project in projects)
             {
-                // Update the status of projects based on the end date
+              
                 if (project.Status.ToLower() != "completed" && project.EndDate < DateTime.UtcNow)
                 {
                     if (project.Status.ToLower() != "incomplete")

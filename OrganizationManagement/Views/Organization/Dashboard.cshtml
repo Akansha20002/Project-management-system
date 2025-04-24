@@ -10,6 +10,8 @@
 <a asp-controller="Project" asp-action="AddProject" asp-route-organizationId="@organizationId" class="btn btn-primary">
     Add Project
 </a>
+<br />
+
 
 @if (Model != null && Model.Any())
 {
@@ -21,6 +23,16 @@
                     <div class="card-body">
                         <h5 class="card-title">@project.ProjectName</h5>
                         <p class="card-text">Project ID: @project.ProjectId</p>
+
+                        <p class="card-text">
+                            <strong>Status:</strong>
+                            <span class="badge
+                                @(project.Status.ToLower() == "completed" ? "bg-success" :
+                                  project.Status.ToLower() == "incomplete" ? "bg-danger" :
+                                  "bg-warning text-dark")">
+                                @project.Status
+                            </span>
+                        </p>
 
                         <a href="@Url.Action("ProjectDashboard", "Project", new { projectId = project.ProjectId })" class="btn btn-outline-primary">View Details</a>
 
