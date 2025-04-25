@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using OrganizationManagement.Models;
 namespace OrganizationManagement.DTO
 {
     public class TestPlanDTO
@@ -24,7 +24,7 @@ namespace OrganizationManagement.DTO
             public int ProjectId { get; set; }
 
             // Optionally, you can include TestSuites here
-            public ICollection<TestSuiteDTO>? TestSuites { get; set; }
+            public ICollection<TestSuite>? TestSuites { get; set; }
         }
 
     

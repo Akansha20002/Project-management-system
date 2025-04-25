@@ -15,14 +15,12 @@ namespace OrganizationManagement.Controllers
             _tables = tables;
         }
 
-       
         [HttpGet]
         public IActionResult Add(int projectId)
         {
             return View(new TestPlanDTO { ProjectId = projectId });
         }
 
-    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Add(TestPlanDTO dto)
@@ -45,12 +43,19 @@ namespace OrganizationManagement.Controllers
                 };
 
                 _tables.TestsPlans.Add(testPlan);
+
+                // ✅ Automatically update project status to "In Progress"
+                var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == dto.ProjectId);
+                if (project != null && project.Status != "In Progress")
+                {
+                    project.Status = "In Progress";
+                }
+
                 _tables.SaveChanges();
 
                 return RedirectToAction("ProjectDashboard", "Project", new { projectId = dto.ProjectId });
             }
 
-          
             return View(dto);
         }
 
@@ -74,7 +79,6 @@ namespace OrganizationManagement.Controllers
             return View(dto);
         }
 
-  
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(TestPlanDTO dto)
@@ -98,11 +102,9 @@ namespace OrganizationManagement.Controllers
 
                 _tables.SaveChanges();
 
-           
                 return RedirectToAction("ProjectDashboard", "Project", new { projectId = testPlan.ProjectId });
             }
 
- 
             return View(dto);
         }
 
@@ -120,10 +122,14 @@ namespace OrganizationManagement.Controllers
 
             return RedirectToAction("ProjectDashboard", "Project", new { projectId });
         }
+
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var testPlan = _tables.TestsPlans.FirstOrDefault(tp => tp.TestPlanId == id);
+            var testPlan = _tables.TestsPlans
+                .Include(tp => tp.TestSuites) // 💥 Includes test suites
+                .FirstOrDefault(tp => tp.TestPlanId == id);
+
             if (testPlan == null)
                 return NotFound();
 
@@ -134,11 +140,11 @@ namespace OrganizationManagement.Controllers
                 Objective = testPlan.Objective,
                 CreatedBy = testPlan.CreatedBy,
                 Strategy = testPlan.Strategy,
-                ProjectId = testPlan.ProjectId
+                ProjectId = testPlan.ProjectId,
+                TestSuites = testPlan.TestSuites?.ToList()
             };
 
             return View(dto);
         }
-
     }
 }

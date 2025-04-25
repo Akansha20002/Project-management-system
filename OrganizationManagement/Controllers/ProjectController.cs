@@ -4,6 +4,7 @@ using OrganizationManagement.Models;
 using OrganizationManagement.DTO;
 using OrganizationManagement.DBContext;
 using System.Linq;
+using OrganizationManagement.ViewModels;
 
 namespace OrganizationManagement.Controllers
 {

@@ -12,7 +12,6 @@
 </a>
 <br />
 
-
 @if (Model != null && Model.Any())
 {
     <div class="row">
@@ -26,12 +25,25 @@
 
                         <p class="card-text">
                             <strong>Status:</strong>
-                            <span class="badge
-                                @(project.Status.ToLower() == "completed" ? "bg-success" :
-                                  project.Status.ToLower() == "incomplete" ? "bg-danger" :
-                                  "bg-warning text-dark")">
-                                @project.Status
-                            </span>
+                            @{
+                                var status = project.Status?.ToLower() ?? "";
+                                var badgeClass = status switch
+                                {
+                                    "not started" => "bg-secondary",
+                                    "in progress" => "bg-warning text-dark",
+                                    "completed" => "bg-success",
+                                    _ => "bg-danger"
+                                };
+
+                                var statusLabel = status switch
+                                {
+                                    "not started" => "Not Started ⚪",
+                                    "in progress" => "In Progress ⏳",
+                                    "completed" => "Completed ✅",
+                                    _ => "Unknown ❓"
+                                };
+                            }
+                            <span class="badge @badgeClass">@statusLabel</span>
                         </p>
 
                         <a href="@Url.Action("ProjectDashboard", "Project", new { projectId = project.ProjectId })" class="btn btn-outline-primary">View Details</a>
