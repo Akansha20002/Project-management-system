@@ -6,6 +6,8 @@ namespace OrganizationManagement.Models
     {
         public int Id { get; set; }
 
+        public int StepNumber { get; set; }
+
         [Required]
         public string Action { get; set; }
 
