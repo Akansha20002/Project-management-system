@@ -3,15 +3,17 @@ using OrganizationManagement.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OrganizationManagement.Services.Interfaces
+namespace OrganizationManagement.Services
 {
     public interface IAccountService
     {
-        Task<Admin> LoginAsync(AdminDto model);
-        Task<bool> RegisterAsync(AdminDto model);
+        Task<Admin> AuthenticateUserAsync(AdminDto model);
+        Task<bool> IsEmailRegisteredAsync(string email);
+        Task<Admin> RegisterUserAsync(AdminDto model);
         Task<Admin> GetUserByIdAsync(int userId);
-        Task<List<Organization>> GetOrganizationsByUserIdAsync(int userId);
-        Task<bool> RegisterOrganizationAsync(int userId, OrganizationDTO model);
-        Task<bool> DeleteOrganizationAsync(int orgId);
+        Task<List<Organization>> GetOrganizationsForUserAsync(int userId);
+        Task<bool> OrganizationExistsAsync(int userId, string orgName);
+        Task RegisterOrganizationAsync(int userId, OrganizationDTO model);
+        Task DeleteOrganizationAsync(int organizationId);
     }
 }

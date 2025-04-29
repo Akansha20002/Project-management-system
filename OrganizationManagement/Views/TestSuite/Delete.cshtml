@@ -1,0 +1,13 @@
+﻿@model OrganizationManagement.Models.TestSuite
+
+<h2>Delete Test Suite</h2>
+
+<p>Are you sure you want to delete the test suite: <strong>@Model.Name</strong>?</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="TestSuiteId" />
+    <input type="hidden" asp-for="TestPlanId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+<a href="@Url.Action("Details", "TestPlan", new { id = Model.TestPlanId })" class="btn btn-secondary">Cancel</a>

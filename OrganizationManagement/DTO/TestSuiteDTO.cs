@@ -13,7 +13,6 @@ namespace OrganizationManagement.DTO
         [Required, MaxLength(500)]
         public string Description { get; set; }
 
-        [Required]
         public int TestPlanId { get; set; }
 
 

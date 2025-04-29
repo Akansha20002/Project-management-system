@@ -1,133 +1,150 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OrganizationManagement.DBContext;
+using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
-using OrganizationManagement.Services.Interface;
-using System.Linq;
 
 namespace OrganizationManagement.Controllers
 {
     public class TestPlanController : Controller
     {
-        private readonly ITestPlanService _testplanservice;
+        private readonly ApplicationDbContext _tables;
 
-        public TestPlanController(ITestPlanService testplanservice)
+        public TestPlanController(ApplicationDbContext tables)
         {
-            _testplanservice = testplanservice;
+            _tables = tables;
         }
 
-        // GET: Test Plans for the logged-in user and a specific project
-        public IActionResult Index(int projectId)
-        {
-            // Get the userId from the current logged-in user
-            var userId = Request.Cookies["UserId"];
-
-            // If there's no userId (user is not logged in), redirect them to the login page or another page
-            if (string.IsNullOrEmpty(userId))
-            {
-                TempData["ErrorMessage"] = "You must be logged in to view test plans.";
-                return RedirectToAction("Login", "Account");  // Assuming you have a login action in the Account controller
-            }
-
-            // Fetch test plans based on the current userId
-            var tp = _testplanservice.GetTestPlansByUserId(userId);
-
-            // Pass userId and projectId to the view
-            ViewBag.UserId = userId;
-            ViewBag.ProjectId = projectId;
-
-            return View(tp);  // Return the list of test plans for this user and project
-        }
-
-        // GET: Render form to add a test plan
-        // GET: Render form to add a test plan
+        [HttpGet]
         public IActionResult Add(int projectId)
         {
-            var userId = Request.Cookies["UserId"];
-
-            // Check if projectId is 0
-            if (string.IsNullOrEmpty(userId) || projectId == 0)
-            {
-                TempData["ErrorMessage"] = "Invalid Project or User. Please go back and try again.";
-                return RedirectToAction("Index", "Dashboard");
-            }
-
-            var model = new TestPlan
-            {
-                CreatedBy = userId,
-                ProjectId = projectId  // Set the ProjectId for the model
-            };
-
-            return View(model);  // Return the form view with the initialized model
+            return View(new TestPlanDTO { ProjectId = projectId });
         }
 
-        // POST: Add a new test plan
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(TestPlan testPlan)
+        public IActionResult Add(TestPlanDTO dto)
         {
-            // Debugging: Log the ModelState errors if not valid
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                ModelState.AddModelError("Name", "Test plan name is required.");
+
+            if (string.IsNullOrWhiteSpace(dto.Objective))
+                ModelState.AddModelError("Objective", "Objective is required.");
+
+            if (ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                var testPlan = new TestPlan
                 {
-                    Console.WriteLine(error.ErrorMessage);  // Log the errors for debugging
+                    Name = dto.Name.Trim(),
+                    Objective = dto.Objective,
+                    CreatedBy = dto.CreatedBy,
+                    Strategy = dto.Strategy,
+                    ProjectId = dto.ProjectId
+                };
+
+                _tables.TestsPlans.Add(testPlan);
+
+                // ✅ Automatically update project status to "In Progress"
+                var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == dto.ProjectId);
+                if (project != null && project.Status != "In Progress")
+                {
+                    project.Status = "In Progress";
                 }
 
-                return View(testPlan);  // Redisplay the form with validation errors
+                _tables.SaveChanges();
+
+                return RedirectToAction("ProjectDashboard", "Project", new { projectId = dto.ProjectId });
             }
 
-            // If the model is valid, add the test plan to the service
-            _testplanservice.Add(testPlan);
-
-            // Redirect to the index page of test plans with the updated projectId
-            return RedirectToAction("Index", new { projectId = testPlan.ProjectId });
+            return View(dto);
         }
 
-
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            var testPlan = _testplanservice.GetTestPlansByUserId(Request.Cookies["UserId"])
-                                          .FirstOrDefault(tp => tp.TestPlanId == id);
-            if (testPlan == null) return NotFound();
+            var testPlan = _tables.TestsPlans.Find(id);
+            if (testPlan == null)
+                return NotFound();
 
-            return View(testPlan);
+            var dto = new TestPlanDTO
+            {
+                TestPlanId = testPlan.TestPlanId,
+                Name = testPlan.Name,
+                Objective = testPlan.Objective,
+                CreatedBy = testPlan.CreatedBy,
+                Strategy = testPlan.Strategy,
+                ProjectId = testPlan.ProjectId
+            };
+
+            return View(dto);
         }
 
-
-        // POST REQ FOR UPDATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(TestPlan testPlan)
+        public IActionResult Edit(TestPlanDTO dto)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                ModelState.AddModelError("Name", "Test plan name is required.");
+
+            if (string.IsNullOrWhiteSpace(dto.Objective))
+                ModelState.AddModelError("Objective", "Objective is required.");
+
+            if (ModelState.IsValid)
             {
-                return View(testPlan);
+                var testPlan = _tables.TestsPlans.Find(dto.TestPlanId);
+                if (testPlan == null)
+                    return NotFound();
+
+                testPlan.Name = dto.Name.Trim();
+                testPlan.Objective = dto.Objective;
+                testPlan.CreatedBy = dto.CreatedBy;
+                testPlan.Strategy = dto.Strategy;
+
+                _tables.SaveChanges();
+
+                return RedirectToAction("ProjectDashboard", "Project", new { projectId = testPlan.ProjectId });
             }
 
-            _testplanservice.Update(testPlan);
-            return RedirectToAction("Index", new { projectId = testPlan.ProjectId });
+            return View(dto);
         }
 
-
-
-        //DELETE METHOD POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public IActionResult Delete(int id,int projectId)
+        public IActionResult Delete(int id)
         {
-            var userId = Request.Cookies["UserId"];
-            var testPlan = _testplanservice.GetTestPlansByUserId(userId)
-                                          .FirstOrDefault(tp => tp.TestPlanId == id);
+            var testPlan = _tables.TestsPlans.Find(id);
+            if (testPlan == null)
+                return NotFound();
+
+            int projectId = testPlan.ProjectId;
+            _tables.TestsPlans.Remove(testPlan);
+            _tables.SaveChanges();
+
+            return RedirectToAction("ProjectDashboard", "Project", new { projectId });
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var testPlan = _tables.TestsPlans
+                .Include(tp => tp.TestSuites) // 💥 Includes test suites
+                .FirstOrDefault(tp => tp.TestPlanId == id);
 
             if (testPlan == null)
+                return NotFound();
+
+            var dto = new TestPlanDTO
             {
-                TempData["ErrorMessage"] = "Test Plan not found.";
-                return RedirectToAction("Index", new { projectId });
-            }
+                TestPlanId = testPlan.TestPlanId,
+                Name = testPlan.Name,
+                Objective = testPlan.Objective,
+                CreatedBy = testPlan.CreatedBy,
+                Strategy = testPlan.Strategy,
+                ProjectId = testPlan.ProjectId,
+                TestSuites = testPlan.TestSuites?.ToList()
+            };
 
-            _testplanservice.Delete(testPlan);
-            return RedirectToAction("Index", new { projectId });
-
+            return View(dto);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace OrganizationManagement.Models
         public int ProjectId { get; set; }
 
 
-        public ICollection<TestSuite>? TestSuites { get; set; }
+        public ICollection<TestSuite> TestSuites { get; set; }
     }
 
 }

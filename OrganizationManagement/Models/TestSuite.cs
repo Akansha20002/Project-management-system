@@ -12,11 +12,10 @@ namespace OrganizationManagement.Models
         [Required, MaxLength(500)]
         public string Description { get; set; }
 
-        [Required]
         public int TestPlanId { get; set; }
 
 
-        public ICollection<TestCase> ?TestCases { get; set; }
+        public ICollection<TestCase> TestCases { get; set; }
     }
 
 }

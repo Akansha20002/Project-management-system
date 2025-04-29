@@ -55,10 +55,8 @@
 // app.Run();
 using Microsoft.EntityFrameworkCore;
 using OrganizationManagement.DBContext;
-using OrganizationManagement.Repo;
-using OrganizationManagement.Repo.Contract;
 using OrganizationManagement.Services;
-using OrganizationManagement.Services.Interface;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,8 +67,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<ITestPlanService, TestPlanService>();
-builder.Services.AddScoped<ITestPlanRepository,TestPlanRepository>();
+
 builder.Services.AddAuthentication("CustomCookieAuth")
     .AddCookie("CustomCookieAuth", options =>
     {
@@ -85,9 +82,9 @@ builder.Services.AddAuthentication("CustomCookieAuth")
         options.SlidingExpiration = true;
     });
 builder.Services.AddHttpContextAccessor();
-//builder.services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<ITestSuitesService, TestSuitesService>();
-builder.Services.AddScoped<ITestSuiteRepository, TestSuitesRepository>();
+
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

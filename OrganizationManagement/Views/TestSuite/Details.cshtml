@@ -1,0 +1,20 @@
+﻿@model OrganizationManagement.Models.TestSuite
+
+<h2>Test Suite Details</h2>
+
+<div>
+    <h3>@Model.Name</h3> <!-- Test Suite Name -->
+    <p>@Model.Description</p> <!-- Test Suite Description -->
+
+    <h4>Test Cases</h4>
+    <ul>
+        @foreach (var testCase in Model.TestCases)
+        {
+            <li>
+                <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a> <!-- Link to TestCase details -->
+            </li>
+        }
+    </ul>
+
+    <a href="@Url.Action("Create", "TestCase", new { testSuiteId = Model.TestSuiteId })" class="btn btn-sm btn-primary">Add Test Case</a>
+</div>

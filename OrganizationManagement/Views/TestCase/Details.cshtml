@@ -1,0 +1,13 @@
+﻿@model OrganizationManagement.DTO.TestCaseDTO
+
+<h2>Test Case Details</h2>
+
+<div>
+    <h3>@Model.Title</h3>
+    <p>@Model.Description</p>
+    <p><strong>Steps:</strong> @Model.Steps</p>
+    <p><strong>Automated:</strong> @Model.IsAutomated</p>
+
+    <a href="@Url.Action("Edit", "TestCase", new { id = Model.Id })" class="btn btn-primary">Edit</a>
+    <a href="@Url.Action("Delete", "TestCase", new { id = Model.Id })" class="btn btn-danger">Delete</a>
+</div>

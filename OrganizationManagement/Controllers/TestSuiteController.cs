@@ -1,132 +1,141 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OrganizationManagement.DBContext;
 using OrganizationManagement.Models;
-using OrganizationManagement.Services.Interface;
-using System.Linq;
+using OrganizationManagement.DTO;
+using System.Threading.Tasks;
 
-namespace OrganizationManagement.Controllers
+public class TestSuiteController : Controller
 {
-    public class TestSuiteController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public TestSuiteController(ApplicationDbContext context)
     {
-        private readonly ITestSuitesService _testSuitesService;
+        _context = context;
+    }
 
-        public TestSuiteController(ITestSuitesService testSuitesService)
+    // GET: TestSuite/Details/5
+    public async Task<IActionResult> Details(int id)
+    {
+        var testSuite = await _context.TestSuites
+            .Include(ts => ts.TestCases) // Include related TestCases
+            .FirstOrDefaultAsync(ts => ts.TestSuiteId == id);
+
+        if (testSuite == null)
         {
-            _testSuitesService = testSuitesService;
+            return NotFound();
         }
 
-        // GET: List of test suites for a user and test plan
-        public IActionResult Index(int testPlanId)
+        return View(testSuite); // Return TestSuite details with associated TestCases
+    }
+
+    // GET: TestSuite/Create
+    public IActionResult Create(int testPlanId)
+    {
+        var model = new TestSuiteDTO { TestPlanId = testPlanId };
+        return View(model);
+    }
+
+    // POST: TestSuite/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(TestSuiteDTO model)
+    {
+        if (ModelState.IsValid)
         {
-            var userIdCookie = Request.Cookies["UserId"];
-
-            if (string.IsNullOrEmpty(userIdCookie) || !int.TryParse(userIdCookie, out int userId))
+            var testSuite = new TestSuite
             {
-                TempData["ErrorMessage"] = "You must be logged in to view test suites.";
-                return RedirectToAction("Login", "Account");
-            }
-
-            var suites = _testSuitesService.GetTestSuiteByUserId(userId)
-                                           .Where(ts => ts.TestPlanId == testPlanId)
-                                           .ToList();
-
-            ViewBag.UserId = userId;
-            ViewBag.TestPlanId = testPlanId;
-
-            return View(suites);
-        }
-
-        // GET: Render form to add a test suite
-        public IActionResult Add(int testPlanId)
-        {
-            if (testPlanId == 0)
-            {
-                TempData["ErrorMessage"] = "Invalid Test Plan.";
-                return RedirectToAction("Index", "Dashboard");
-            }
-
-            var model = new TestSuite
-            {
-                TestPlanId = testPlanId
+                Name = model.Name,
+                Description = model.Description,
+                TestPlanId = model.TestPlanId
             };
 
-            return View(model);
+            _context.TestSuites.Add(testSuite);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "TestPlan", new { id = model.TestPlanId });
         }
 
-        // POST: Add a new test suite
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Add(TestSuite testSuite)
+        return View(model);
+    }
+
+    // GET: TestSuite/Edit/5
+    public async Task<IActionResult> Edit(int id)
+    {
+        var testSuite = await _context.TestSuites.FindAsync(id);
+        if (testSuite == null)
         {
-            if (!ModelState.IsValid)
-            {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine(error.ErrorMessage);
-                }
-
-                return View(testSuite);
-            }
-
-            _testSuitesService.Add(testSuite);
-            return RedirectToAction("Index", new { testPlanId = testSuite.TestPlanId });
+            return NotFound();
         }
 
-        // GET: Edit form
-        public IActionResult Edit(int TestSuiteId)
+        var model = new TestSuiteDTO
         {
-            var userIdCookie = Request.Cookies["UserId"];
+            TestSuiteId = testSuite.TestSuiteId,
+            Name = testSuite.Name,
+            Description = testSuite.Description,
+            TestPlanId = testSuite.TestPlanId
+        };
 
-            if (string.IsNullOrEmpty(userIdCookie) || !int.TryParse(userIdCookie, out int userId))
+        return View(model);
+    }
+
+    // POST: TestSuite/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, TestSuiteDTO model)
+    {
+        if (id != model.TestSuiteId)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            var testSuite = await _context.TestSuites.FindAsync(id);
+            if (testSuite == null)
             {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var suite = _testSuitesService.GetTestSuiteByUserId(userId)
-                                          .FirstOrDefault(ts => ts.TestSuiteId == TestSuiteId);
-
-            if (suite == null)
                 return NotFound();
+            }
 
-            return View(suite);
+            testSuite.Name = model.Name;
+            testSuite.Description = model.Description;
+
+            _context.Update(testSuite);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "TestPlan", new { id = testSuite.TestPlanId });
         }
 
-        // POST: Edit update
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(TestSuite testSuite)
+        return View(model);
+    }
+
+    // GET: TestSuite/Delete/5
+    public async Task<IActionResult> Delete(int id)
+    {
+        var testSuite = await _context.TestSuites
+            .Include(ts => ts.TestCases)
+            .FirstOrDefaultAsync(ts => ts.TestSuiteId == id);
+
+        if (testSuite == null)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(testSuite);
-            }
-
-            _testSuitesService.Update(testSuite);
-            return RedirectToAction("Index", new { testPlanId = testSuite.TestPlanId });
+            return NotFound();
         }
 
-        // POST: Delete
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, int testPlanId)
+        return View(testSuite);
+    }
+
+    // POST: TestSuite/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var testSuite = await _context.TestSuites.FindAsync(id);
+        if (testSuite != null)
         {
-            var userIdCookie = Request.Cookies["UserId"];
-
-            if (string.IsNullOrEmpty(userIdCookie) || !int.TryParse(userIdCookie, out int userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var suite = _testSuitesService.GetTestSuiteByUserId(userId)
-                                          .FirstOrDefault(ts => ts.TestSuiteId == id);
-
-            if (suite == null)
-            {
-                TempData["ErrorMessage"] = "Test Suite not found.";
-                return RedirectToAction("Index", new { testPlanId });
-            }
-
-            _testSuitesService.Delete(suite);
-            return RedirectToAction("Index", new { testPlanId });
+            _context.TestSuites.Remove(testSuite);
+            await _context.SaveChangesAsync();
         }
+
+        return RedirectToAction("Details", "TestPlan", new { id = testSuite.TestPlanId });
     }
 }

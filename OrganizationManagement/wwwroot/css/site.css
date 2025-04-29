@@ -132,7 +132,7 @@ html {
   backdrop-filter: blur(4px);
   box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
 } */
-.footer {
+/*.footer {
   position: fixed;
   bottom: 10px;
   width: 100%;
@@ -143,7 +143,7 @@ html {
   z-index: 1000;
   padding: 5px 0;
   pointer-events: none;
-}
+}*/
 .custom-footer {
   background-color: rgba(248, 249, 250, 0.9);
   color: #212529;

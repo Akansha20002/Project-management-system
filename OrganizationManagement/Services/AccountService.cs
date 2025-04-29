@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
-using OrganizationManagement.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,38 +18,37 @@ namespace OrganizationManagement.Services
             _context = context;
         }
 
-        public async Task<Admin> LoginAsync(AdminDto model)
+        public async Task<Admin> AuthenticateUserAsync(AdminDto model)
         {
             var user = await _context.Admins.FirstOrDefaultAsync(a => a.Email == model.Email);
             if (user == null || user.Role != "user")
                 return null;
 
-            var hasher = new PasswordHasher<Admin>();
-            var result = hasher.VerifyHashedPassword(user, user.Password, model.Password);
+            var passwordHasher = new PasswordHasher<Admin>();
+            var result = passwordHasher.VerifyHashedPassword(user, user.Password, model.Password);
 
             return result == PasswordVerificationResult.Success ? user : null;
         }
 
-        public async Task<bool> RegisterAsync(AdminDto model)
+        public async Task<bool> IsEmailRegisteredAsync(string email)
         {
-            if (await _context.Admins.AnyAsync(a => a.Email == model.Email))
-                return false;
+            return await _context.Admins.AnyAsync(a => a.Email == email);
+        }
 
-            if (model.Role != "user")
-                return false;
-
-            var hasher = new PasswordHasher<Admin>();
+        public async Task<Admin> RegisterUserAsync(AdminDto model)
+        {
+            var passwordHasher = new PasswordHasher<Admin>();
             var admin = new Admin
             {
                 Name = model.Name,
                 Email = model.Email,
                 Role = model.Role,
-                Password = hasher.HashPassword(null, model.Password)
+                Password = passwordHasher.HashPassword(null, model.Password)
             };
 
-            await _context.Admins.AddAsync(admin);
+            _context.Admins.Add(admin);
             await _context.SaveChangesAsync();
-            return true;
+            return admin;
         }
 
         public async Task<Admin> GetUserByIdAsync(int userId)
@@ -57,39 +56,39 @@ namespace OrganizationManagement.Services
             return await _context.Admins.FindAsync(userId);
         }
 
-        public async Task<List<Organization>> GetOrganizationsByUserIdAsync(int userId)
+        public async Task<List<Organization>> GetOrganizationsForUserAsync(int userId)
         {
             return await _context.Organizations
-                .Where(o => o.CreatedBy == userId)
-                .ToListAsync();
+                                 .Where(o => o.CreatedBy == userId)
+                                 .ToListAsync();
         }
 
-        public async Task<bool> RegisterOrganizationAsync(int userId, OrganizationDTO model)
+        public async Task<bool> OrganizationExistsAsync(int userId, string orgName)
         {
-            if (await _context.Organizations
-                .AnyAsync(o => o.CreatedBy == userId && o.Name == model.Name))
-                return false;
+            return await _context.Organizations
+                .AnyAsync(o => o.CreatedBy == userId && o.Name == orgName);
+        }
 
-            var organization = new Organization
+        public async Task RegisterOrganizationAsync(int userId, OrganizationDTO model)
+        {
+            var org = new Organization
             {
                 Name = model.Name,
                 CreatedBy = userId
             };
 
-            await _context.Organizations.AddAsync(organization);
+            await _context.Organizations.AddAsync(org);
             await _context.SaveChangesAsync();
-            return true;
         }
 
-        public async Task<bool> DeleteOrganizationAsync(int orgId)
+        public async Task DeleteOrganizationAsync(int organizationId)
         {
-            var org = await _context.Organizations.FindAsync(orgId);
-            if (org == null)
-                return false;
-
-            _context.Organizations.Remove(org);
-            await _context.SaveChangesAsync();
-            return true;
+            var org = await _context.Organizations.FindAsync(organizationId);
+            if (org != null)
+            {
+                _context.Organizations.Remove(org);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
