@@ -5,7 +5,8 @@
 <div>
     <h3>@Model.Title</h3>
     <p>@Model.Description</p>
-    <p><strong>Steps:</strong> @Model.Steps</p>
+    <p><strong>Steps:</strong></p>
+    <p style="white-space: pre-line;">@Model.Steps</p>
     <p><strong>Automated:</strong> @Model.IsAutomated</p>
 
     <a href="@Url.Action("Edit", "TestCase", new { id = Model.Id })" class="btn btn-primary">Edit</a>

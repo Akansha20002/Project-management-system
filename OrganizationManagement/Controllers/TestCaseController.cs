@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class TestCaseController : Controller
 {
@@ -37,13 +40,16 @@ public class TestCaseController : Controller
                 return View(model);
             }
 
+            // ✅ Format steps with numbering
+            model.Steps = FormatSteps(model.Steps);
+
             var testCase = new TestCase
             {
                 Title = model.Title,
                 Description = model.Description,
                 Steps = model.Steps,
                 TestSuiteId = model.TestSuiteId,
-                IsAutomated = model.IsAutomated // ✅ Set IsAutomated
+                IsAutomated = model.IsAutomated
             };
 
             _context.Add(testCase);
@@ -72,7 +78,7 @@ public class TestCaseController : Controller
             Description = testCase.Description,
             Steps = testCase.Steps,
             TestSuiteId = testCase.TestSuiteId,
-            IsAutomated = testCase.IsAutomated // ✅ Set IsAutomated
+            IsAutomated = testCase.IsAutomated
         };
 
         return View(model);
@@ -94,12 +100,60 @@ public class TestCaseController : Controller
             Description = testCase.Description,
             Steps = testCase.Steps,
             TestSuiteId = testCase.TestSuiteId,
-            IsAutomated = testCase.IsAutomated // ✅ Set IsAutomated
+            IsAutomated = testCase.IsAutomated
         };
 
         return View(model);
     }
 
+    // POST: TestCase/Edit/5
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
+    //public async Task<IActionResult> Edit(int id, TestCaseDTO model)
+    //{
+    //    if (id != model.Id)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    if (ModelState.IsValid)
+    //    {
+    //        try
+    //        {
+    //            var testCase = await _context.TestCases.FindAsync(id);
+    //            if (testCase == null)
+    //            {
+    //                return NotFound();
+    //            }
+
+    //            // ✅ Format steps with numbering only if not already formatted
+    //            model.Steps = FormatSteps(model.Steps);
+
+    //            testCase.Title = model.Title;
+    //            testCase.Description = model.Description;
+    //            testCase.Steps = model.Steps;
+    //            testCase.IsAutomated = model.IsAutomated;
+
+    //            _context.Update(testCase);
+    //            await _context.SaveChangesAsync();
+
+    //            return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
+    //        }
+    //        catch (DbUpdateConcurrencyException)
+    //        {
+    //            if (!TestCaseExists(model.Id))
+    //            {
+    //                return NotFound();
+    //            }
+    //            else
+    //            {
+    //                throw;
+    //            }
+    //        }
+    //    }
+
+    //    return View(model);
+    //}
     // POST: TestCase/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -112,40 +166,29 @@ public class TestCaseController : Controller
 
         if (ModelState.IsValid)
         {
-            try
+            var testCase = await _context.TestCases.FindAsync(id);
+            if (testCase == null)
             {
-                var testCase = await _context.TestCases.FindAsync(id);
-                if (testCase == null)
-                {
-                    return NotFound();
-                }
-
-                testCase.Title = model.Title;
-                testCase.Description = model.Description;
-                testCase.Steps = model.Steps;
-                //testCase.TestSuiteId = model.TestSuiteId;
-                testCase.IsAutomated = model.IsAutomated; // ✅ Update IsAutomated
-
-                _context.Update(testCase);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TestCaseExists(model.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            // ✅ Format steps with numbering only if not already formatted
+            model.Steps = FormatSteps(model.Steps);
+
+            testCase.Title = model.Title;
+            testCase.Description = model.Description;
+            testCase.Steps = model.Steps;
+            testCase.IsAutomated = model.IsAutomated;
+
+            _context.Update(testCase);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
         }
 
         return View(model);
     }
+
 
     // GET: TestCase/Delete/5
     public async Task<IActionResult> Delete(int id)
@@ -163,7 +206,7 @@ public class TestCaseController : Controller
             Description = testCase.Description,
             Steps = testCase.Steps,
             TestSuiteId = testCase.TestSuiteId,
-            IsAutomated = testCase.IsAutomated // ✅ Set IsAutomated
+            IsAutomated = testCase.IsAutomated
         };
 
         return View(model);
@@ -182,6 +225,28 @@ public class TestCaseController : Controller
         }
 
         return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
+    }
+
+    // ✅ Helper method to format steps only if not already numbered
+    private string FormatSteps(string steps)
+    {
+        if (string.IsNullOrWhiteSpace(steps))
+            return steps;
+
+        var lines = steps
+            .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+        // Check if all lines are already numbered with "Step X:"
+        if (lines.All(line => line.Trim().StartsWith("Step ")))
+        {
+            return steps; // Already formatted
+        }
+
+        var formatted = lines
+            .Select((line, index) => $"Step {index + 1}: {line.Trim()}")
+            .ToArray();
+
+        return string.Join(Environment.NewLine, formatted);
     }
 
     private bool TestCaseExists(int id)

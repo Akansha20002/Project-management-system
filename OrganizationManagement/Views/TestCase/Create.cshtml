@@ -18,10 +18,11 @@
     </div>
 
     <div class="form-group">
-
-        <label for="Steps">Steps</label>
-        <textarea asp-for="Steps" class="form-control" required></textarea>
+        <label asp-for="Steps" class="control-label"></label>
+        <textarea asp-for="Steps" class="form-control" rows="6"></textarea>
+        <span asp-validation-for="Steps" class="text-danger"></span>
     </div>
+
 
     <div class="form-group">
         <div class="form-check">
