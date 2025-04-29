@@ -55,10 +55,35 @@
 // app.Run();
 using Microsoft.EntityFrameworkCore;
 using OrganizationManagement.DBContext;
+using OrganizationManagement.Repo;
+using OrganizationManagement.Repo.Contract;
+using OrganizationManagement.Repository;
 using OrganizationManagement.Services;
+using OrganizationManagement.Services.Interface;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddScoped<ITestPlanService, TestPlanService>();
+builder.Services.AddScoped<ITestPlanRepository, TestPlanRepository>();
+
+
+builder.Services.AddScoped<ITestCaseService, TestCaseService>();
+builder.Services.AddScoped<ITestCaseRepository, TestCaseRepository>();
+
+builder.Services.AddScoped<ITestSuiteService, TestSuiteService>();
+builder.Services.AddScoped<ITestSuiteRepository, TestSuiteRepository>();
+
+builder.Services.AddScoped<ITestPlanService, TestPlanService>();
+builder.Services.AddScoped<ITestPlanRepository, TestPlanRepository>();
+
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+
 
 // Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

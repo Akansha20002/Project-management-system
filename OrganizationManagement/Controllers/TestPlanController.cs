@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
-using OrganizationManagement.Models;
+using OrganizationManagement.Services.Interface;
 
 namespace OrganizationManagement.Controllers
 {
     public class TestPlanController : Controller
     {
-        private readonly ApplicationDbContext _tables;
+        private readonly ITestPlanService _testPlanService;
 
-        public TestPlanController(ApplicationDbContext tables)
+        public TestPlanController(ITestPlanService testPlanService)
         {
-            _tables = tables;
+            _testPlanService = testPlanService;
         }
 
         [HttpGet]
@@ -33,26 +31,7 @@ namespace OrganizationManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                var testPlan = new TestPlan
-                {
-                    Name = dto.Name.Trim(),
-                    Objective = dto.Objective,
-                    CreatedBy = dto.CreatedBy,
-                    Strategy = dto.Strategy,
-                    ProjectId = dto.ProjectId
-                };
-
-                _tables.TestsPlans.Add(testPlan);
-
-                // ✅ Automatically update project status to "In Progress"
-                var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == dto.ProjectId);
-                if (project != null && project.Status != "In Progress")
-                {
-                    project.Status = "In Progress";
-                }
-
-                _tables.SaveChanges();
-
+                _testPlanService.AddTestPlan(dto);
                 return RedirectToAction("ProjectDashboard", "Project", new { projectId = dto.ProjectId });
             }
 
@@ -62,19 +41,9 @@ namespace OrganizationManagement.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var testPlan = _tables.TestsPlans.Find(id);
-            if (testPlan == null)
+            var dto = _testPlanService.GetTestPlanById(id);
+            if (dto == null)
                 return NotFound();
-
-            var dto = new TestPlanDTO
-            {
-                TestPlanId = testPlan.TestPlanId,
-                Name = testPlan.Name,
-                Objective = testPlan.Objective,
-                CreatedBy = testPlan.CreatedBy,
-                Strategy = testPlan.Strategy,
-                ProjectId = testPlan.ProjectId
-            };
 
             return View(dto);
         }
@@ -91,18 +60,11 @@ namespace OrganizationManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                var testPlan = _tables.TestsPlans.Find(dto.TestPlanId);
-                if (testPlan == null)
+                var result = _testPlanService.UpdateTestPlan(dto);
+                if (result == null)
                     return NotFound();
 
-                testPlan.Name = dto.Name.Trim();
-                testPlan.Objective = dto.Objective;
-                testPlan.CreatedBy = dto.CreatedBy;
-                testPlan.Strategy = dto.Strategy;
-
-                _tables.SaveChanges();
-
-                return RedirectToAction("ProjectDashboard", "Project", new { projectId = testPlan.ProjectId });
+                return RedirectToAction("ProjectDashboard", "Project", new { projectId = dto.ProjectId });
             }
 
             return View(dto);
@@ -112,39 +74,22 @@ namespace OrganizationManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            var testPlan = _tables.TestsPlans.Find(id);
-            if (testPlan == null)
+            var success = _testPlanService.DeleteTestPlan(id);
+            if (!success)
                 return NotFound();
 
-            int projectId = testPlan.ProjectId;
-            _tables.TestsPlans.Remove(testPlan);
-            _tables.SaveChanges();
-
-            return RedirectToAction("ProjectDashboard", "Project", new { projectId });
+            return RedirectToAction("ProjectDashboard", "Project");
         }
 
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var testPlan = _tables.TestsPlans
-                .Include(tp => tp.TestSuites) // 💥 Includes test suites
-                .FirstOrDefault(tp => tp.TestPlanId == id);
-
-            if (testPlan == null)
+            var dto = _testPlanService.GetTestPlanDetails(id);
+            if (dto == null)
                 return NotFound();
-
-            var dto = new TestPlanDTO
-            {
-                TestPlanId = testPlan.TestPlanId,
-                Name = testPlan.Name,
-                Objective = testPlan.Objective,
-                CreatedBy = testPlan.CreatedBy,
-                Strategy = testPlan.Strategy,
-                ProjectId = testPlan.ProjectId,
-                TestSuites = testPlan.TestSuites?.ToList()
-            };
 
             return View(dto);
         }
     }
 }
+

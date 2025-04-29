@@ -4,14 +4,12 @@ namespace OrganizationManagement.Repo.Contract
 {
     public interface ITestPlanRepository
     {
-        ICollection<TestPlan> GetTestPlansByUserId(string userId);
-        TestPlan Add(TestPlan testPlans);
-        TestPlan Update(TestPlan testPlans);
-
-        TestPlan Delete(TestPlan testPlans);
-        //TestSuite Add(TestSuite testSuites);
-        //TestSuite Delete(TestSuite testSuites);
-        //ICollection<TestSuite> GetTestPlansByUserId(int userId);
-        //TestSuite Update(TestSuite testSuites);
+        TestPlan Add(TestPlan testPlan);
+        TestPlan Update(TestPlan testPlan);
+        TestPlan Delete(TestPlan testPlan);
+        TestPlan GetById(int id);
+        TestPlan GetByIdWithTestSuites(int id);
+        Project GetProjectById(int projectId);
+        Project UpdateProject(Project project);
     }
 }

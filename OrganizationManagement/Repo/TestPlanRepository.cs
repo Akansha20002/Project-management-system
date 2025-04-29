@@ -1,4 +1,5 @@
-﻿using OrganizationManagement.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using OrganizationManagement.DBContext;
 using OrganizationManagement.Models;
 using OrganizationManagement.Repo.Contract;
 
@@ -6,40 +7,57 @@ namespace OrganizationManagement.Repo
 {
     public class TestPlanRepository : ITestPlanRepository
     {
-        public readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public TestPlanRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public TestPlan Add(TestPlan testPlans)
+        public TestPlan Add(TestPlan testPlan)
         {
-            _context.TestsPlans.Add(testPlans);
+            _context.TestsPlans.Add(testPlan);
             _context.SaveChanges();
-            return testPlans;
-            
+            return testPlan;
         }
 
-        public TestPlan Delete(TestPlan testPlans)
+        public TestPlan Update(TestPlan testPlan)
         {
-            _context.TestsPlans.Remove(testPlans);
+            _context.TestsPlans.Update(testPlan);
             _context.SaveChanges();
-            return testPlans;
+            return testPlan;
         }
 
-        public ICollection<TestPlan> GetTestPlansByUserId(string userId)
+        public TestPlan Delete(TestPlan testPlan)
+        {
+            _context.TestsPlans.Remove(testPlan);
+            _context.SaveChanges();
+            return testPlan;
+        }
+
+        public TestPlan GetById(int id)
+        {
+            return _context.TestsPlans.Find(id);
+        }
+
+        public TestPlan GetByIdWithTestSuites(int id)
         {
             return _context.TestsPlans
-                          .Where(tp => tp.CreatedBy == userId)
-                          .ToList();
+                .Include(tp => tp.TestSuites)
+                .FirstOrDefault(tp => tp.TestPlanId == id);
         }
 
-        public TestPlan Update(TestPlan testPlans)
+        public Project GetProjectById(int projectId)
         {
-            _context.TestsPlans.Update(testPlans);
+            return _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+        }
+
+        public Project UpdateProject(Project project)
+        {
+            _context.Projects.Update(project);
             _context.SaveChanges();
-            return testPlans;
+            return project;
         }
     }
 }
+

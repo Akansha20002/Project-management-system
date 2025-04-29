@@ -4,11 +4,10 @@ namespace OrganizationManagement.Repo.Contract
 {
     public interface ITestSuiteRepository
     {
-        ICollection<TestSuite> GetTestSuiteByUserId(int userId);
-        TestSuite Add(TestSuite testSuites);
-        TestSuite Update(TestSuite testSuites);
-
-        TestSuite Delete(TestSuite testSuites);
-
+        TestSuite GetById(int id);
+        TestSuite Add(TestSuite testSuite);
+        TestSuite Update(TestSuite testSuite);
+        TestSuite Delete(int id);
+        TestSuite GetByIdWithTestCases(int id);
     }
 }

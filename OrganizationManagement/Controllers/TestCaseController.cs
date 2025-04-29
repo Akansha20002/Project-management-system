@@ -1,53 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
-using OrganizationManagement.Models;
+using OrganizationManagement.Services;
 
 public class TestCaseController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ITestCaseService _testCaseService;
 
-    public TestCaseController(ApplicationDbContext context)
+    public TestCaseController(ITestCaseService testCaseService)
     {
-        _context = context;
+        _testCaseService = testCaseService;
     }
 
     // GET: TestCase/Create
     public IActionResult Create(int testSuiteId)
     {
-        var model = new TestCaseDTO
-        {
-            TestSuiteId = testSuiteId
-        };
+        var model = new TestCaseDTO { TestSuiteId = testSuiteId };
         return View(model);
     }
 
     // POST: TestCase/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(TestCaseDTO model)
+    public IActionResult Create(TestCaseDTO model)
     {
         if (ModelState.IsValid)
         {
-            var testSuiteExists = await _context.TestSuites.AnyAsync(ts => ts.TestSuiteId == model.TestSuiteId);
-            if (!testSuiteExists)
+            var testCase = _testCaseService.CreateTestCase(model);
+            if (testCase == null)
             {
                 ModelState.AddModelError("", "The specified Test Suite does not exist.");
                 return View(model);
             }
-
-            var testCase = new TestCase
-            {
-                Title = model.Title,
-                Description = model.Description,
-                Steps = model.Steps,
-                TestSuiteId = model.TestSuiteId,
-                IsAutomated = model.IsAutomated // ✅ Set IsAutomated
-            };
-
-            _context.Add(testCase);
-            await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", "TestSuite", new { id = model.TestSuiteId });
         }
@@ -56,54 +39,33 @@ public class TestCaseController : Controller
     }
 
     // GET: TestCase/Details/5
-    public async Task<IActionResult> Details(int id)
+    public IActionResult Details(int id)
     {
-        var testCase = await _context.TestCases.FirstOrDefaultAsync(tc => tc.Id == id);
-
+        var testCase = _testCaseService.GetTestCaseById(id);
         if (testCase == null)
         {
             return NotFound();
         }
 
-        var model = new TestCaseDTO
-        {
-            Id = testCase.Id,
-            Title = testCase.Title,
-            Description = testCase.Description,
-            Steps = testCase.Steps,
-            TestSuiteId = testCase.TestSuiteId,
-            IsAutomated = testCase.IsAutomated // ✅ Set IsAutomated
-        };
-
-        return View(model);
+        return View(testCase);
     }
 
     // GET: TestCase/Edit/5
-    public async Task<IActionResult> Edit(int id)
+    public IActionResult Edit(int id)
     {
-        var testCase = await _context.TestCases.FindAsync(id);
+        var testCase = _testCaseService.GetTestCaseById(id);
         if (testCase == null)
         {
             return NotFound();
         }
 
-        var model = new TestCaseDTO
-        {
-            Id = testCase.Id,
-            Title = testCase.Title,
-            Description = testCase.Description,
-            Steps = testCase.Steps,
-            TestSuiteId = testCase.TestSuiteId,
-            IsAutomated = testCase.IsAutomated // ✅ Set IsAutomated
-        };
-
-        return View(model);
+        return View(testCase);
     }
 
     // POST: TestCase/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, TestCaseDTO model)
+    public IActionResult Edit(int id, TestCaseDTO model)
     {
         if (id != model.Id)
         {
@@ -112,80 +74,41 @@ public class TestCaseController : Controller
 
         if (ModelState.IsValid)
         {
-            try
+            var updatedTestCase = _testCaseService.UpdateTestCase(model);
+            if (updatedTestCase == null)
             {
-                var testCase = await _context.TestCases.FindAsync(id);
-                if (testCase == null)
-                {
-                    return NotFound();
-                }
-
-                testCase.Title = model.Title;
-                testCase.Description = model.Description;
-                testCase.Steps = model.Steps;
-                //testCase.TestSuiteId = model.TestSuiteId;
-                testCase.IsAutomated = model.IsAutomated; // ✅ Update IsAutomated
-
-                _context.Update(testCase);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TestCaseExists(model.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            return RedirectToAction("Details", "TestSuite", new { id = updatedTestCase.TestSuiteId });
         }
 
         return View(model);
     }
 
     // GET: TestCase/Delete/5
-    public async Task<IActionResult> Delete(int id)
+    public IActionResult Delete(int id)
     {
-        var testCase = await _context.TestCases.FirstOrDefaultAsync(tc => tc.Id == id);
+        var testCase = _testCaseService.GetTestCaseById(id);
         if (testCase == null)
         {
             return NotFound();
         }
 
-        var model = new TestCaseDTO
-        {
-            Id = testCase.Id,
-            Title = testCase.Title,
-            Description = testCase.Description,
-            Steps = testCase.Steps,
-            TestSuiteId = testCase.TestSuiteId,
-            IsAutomated = testCase.IsAutomated // ✅ Set IsAutomated
-        };
-
-        return View(model);
+        return View(testCase);
     }
 
     // POST: TestCase/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    public IActionResult DeleteConfirmed(int id)
     {
-        var testCase = await _context.TestCases.FindAsync(id);
-        if (testCase != null)
+        var deletedTestCase = _testCaseService.DeleteTestCase(id);
+        if (deletedTestCase == null)
         {
-            _context.TestCases.Remove(testCase);
-            await _context.SaveChangesAsync();
+            return NotFound();
         }
 
-        return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
-    }
-
-    private bool TestCaseExists(int id)
-    {
-        return _context.TestCases.Any(e => e.Id == id);
+        return RedirectToAction("Details", "TestSuite", new { id = deletedTestCase.TestSuiteId });
     }
 }

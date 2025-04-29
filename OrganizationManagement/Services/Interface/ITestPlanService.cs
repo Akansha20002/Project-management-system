@@ -1,15 +1,13 @@
-﻿using OrganizationManagement.Models;
+﻿using OrganizationManagement.DTO;
 
 namespace OrganizationManagement.Services.Interface
 {
     public interface ITestPlanService
     {
-
-        ICollection<TestPlan> GetTestPlansByUserId(string userId);
-        TestPlan Add(TestPlan testPlans);
-        TestPlan Update(TestPlan testPlans);
-
-        TestPlan Delete(TestPlan testPlans);
-
+        TestPlanDTO AddTestPlan(TestPlanDTO dto);
+        TestPlanDTO UpdateTestPlan(TestPlanDTO dto);
+        bool DeleteTestPlan(int id);
+        TestPlanDTO GetTestPlanById(int id);
+        TestPlanDTO GetTestPlanDetails(int id);
     }
 }

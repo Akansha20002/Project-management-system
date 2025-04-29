@@ -1,4 +1,5 @@
-﻿using OrganizationManagement.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using OrganizationManagement.DBContext;
 using OrganizationManagement.Models;
 using OrganizationManagement.Repo.Contract;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace OrganizationManagement.Repo
         public ICollection<Organization> GetOrganizationsByUserId(int userId)
         {
             return _dbContext.Organizations
+                             .Include(o => o.Projects) // Include related Projects
                              .Where(o => o.CreatedBy == userId)
                              .ToList();
         }

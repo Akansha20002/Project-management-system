@@ -1,4 +1,5 @@
-﻿@model OrganizationManagement.Models.TestSuite
+﻿@model OrganizationManagement.DTO.TestSuiteDTO
+
 
 <h2>Test Suite Details</h2>
 
@@ -11,7 +12,7 @@
         @foreach (var testCase in Model.TestCases)
         {
             <li>
-                <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a> <!-- Link to TestCase details -->
+                <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a> 
             </li>
         }
     </ul>
