@@ -14,7 +14,7 @@ namespace OrganizationManagement.Models
 
         public int TestPlanId { get; set; }
 
-
+        public TestPlan TestPlan { get; set; }
         public ICollection<TestCase> TestCases { get; set; }
     }
 

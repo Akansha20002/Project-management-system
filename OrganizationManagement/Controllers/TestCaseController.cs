@@ -40,7 +40,7 @@ public class TestCaseController : Controller
                 return View(model);
             }
 
-            // ✅ Format steps with numbering
+            // Format steps with numbering
             model.Steps = FormatSteps(model.Steps);
 
             var testCase = new TestCase
@@ -54,6 +54,9 @@ public class TestCaseController : Controller
 
             _context.Add(testCase);
             await _context.SaveChangesAsync();
+
+            // ✅ Update project status if all conditions met
+            await UpdateProjectStatusAsync(model.TestSuiteId);
 
             return RedirectToAction("Details", "TestSuite", new { id = model.TestSuiteId });
         }
@@ -107,54 +110,6 @@ public class TestCaseController : Controller
     }
 
     // POST: TestCase/Edit/5
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Edit(int id, TestCaseDTO model)
-    //{
-    //    if (id != model.Id)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            var testCase = await _context.TestCases.FindAsync(id);
-    //            if (testCase == null)
-    //            {
-    //                return NotFound();
-    //            }
-
-    //            // ✅ Format steps with numbering only if not already formatted
-    //            model.Steps = FormatSteps(model.Steps);
-
-    //            testCase.Title = model.Title;
-    //            testCase.Description = model.Description;
-    //            testCase.Steps = model.Steps;
-    //            testCase.IsAutomated = model.IsAutomated;
-
-    //            _context.Update(testCase);
-    //            await _context.SaveChangesAsync();
-
-    //            return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!TestCaseExists(model.Id))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //    }
-
-    //    return View(model);
-    //}
-    // POST: TestCase/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, TestCaseDTO model)
@@ -172,7 +127,7 @@ public class TestCaseController : Controller
                 return NotFound();
             }
 
-            // ✅ Format steps with numbering only if not already formatted
+            // Format steps with numbering
             model.Steps = FormatSteps(model.Steps);
 
             testCase.Title = model.Title;
@@ -183,12 +138,14 @@ public class TestCaseController : Controller
             _context.Update(testCase);
             await _context.SaveChangesAsync();
 
+            // ✅ Update project status if all conditions met
+            await UpdateProjectStatusAsync(testCase.TestSuiteId);
+
             return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
         }
 
         return View(model);
     }
-
 
     // GET: TestCase/Delete/5
     public async Task<IActionResult> Delete(int id)
@@ -220,14 +177,18 @@ public class TestCaseController : Controller
         var testCase = await _context.TestCases.FindAsync(id);
         if (testCase != null)
         {
+            int suiteId = testCase.TestSuiteId;
             _context.TestCases.Remove(testCase);
             await _context.SaveChangesAsync();
+
+            // ✅ Recheck project status
+            await UpdateProjectStatusAsync(suiteId);
         }
 
         return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
     }
 
-    // ✅ Helper method to format steps only if not already numbered
+    // ✅ Helper: Format steps with numbering
     private string FormatSteps(string steps)
     {
         if (string.IsNullOrWhiteSpace(steps))
@@ -236,10 +197,9 @@ public class TestCaseController : Controller
         var lines = steps
             .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-        // Check if all lines are already numbered with "Step X:"
         if (lines.All(line => line.Trim().StartsWith("Step ")))
         {
-            return steps; // Already formatted
+            return steps;
         }
 
         var formatted = lines
@@ -252,5 +212,44 @@ public class TestCaseController : Controller
     private bool TestCaseExists(int id)
     {
         return _context.TestCases.Any(e => e.Id == id);
+    }
+
+    // ✅ Helper: Update project status to "Completed" if everything exists
+    private async Task UpdateProjectStatusAsync(int testSuiteId)
+    {
+        var testSuite = await _context.TestSuites
+            .Include(ts => ts.TestPlan)
+                .ThenInclude(tp => tp.Project)
+            .Include(ts => ts.TestCases)
+                .ThenInclude(tc => tc.TestSteps)
+            .FirstOrDefaultAsync(ts => ts.TestSuiteId == testSuiteId);
+
+        if (testSuite?.TestPlan?.Project == null) return;
+
+        var project = testSuite.TestPlan.Project;
+
+        var allTestPlans = await _context.TestsPlans
+            .Where(tp => tp.ProjectId == project.ProjectId)
+            .Include(tp => tp.TestSuites)
+                .ThenInclude(ts => ts.TestCases)
+                    .ThenInclude(tc => tc.TestSteps)
+            .ToListAsync();
+
+        bool allCompleted = allTestPlans.All(tp =>
+            tp.TestSuites != null && tp.TestSuites.Any() &&
+            tp.TestSuites.All(ts =>
+                ts.TestCases != null && ts.TestCases.Any() &&
+                ts.TestCases.All(tc =>
+                    tc.TestSteps != null && tc.TestSteps.Any()
+                )
+            )
+        );
+
+        if (allCompleted && project.Status != "Completed")
+        {
+            project.Status = "Completed";
+            _context.Projects.Update(project);
+            await _context.SaveChangesAsync();
+        }
     }
 }

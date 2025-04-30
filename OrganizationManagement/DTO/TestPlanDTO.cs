@@ -20,12 +20,10 @@ namespace OrganizationManagement.DTO
            
             public string Strategy { get; set; }
 
-       
-            public int ProjectId { get; set; }
+        public int ProjectId { get; set; }
 
-            // Optionally, you can include TestSuites here
-            public ICollection<TestSuite>? TestSuites { get; set; }
-        }
+        public ICollection<TestSuite> TestSuites { get; set; } = new List<TestSuite>();
+    }
 
     
 }

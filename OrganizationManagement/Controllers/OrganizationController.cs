@@ -45,11 +45,11 @@ namespace OrganizationManagement.Controllers
                 StartDate = p.StartDate.ToUniversalTime(),
                 EndDate = p.EndDate.ToUniversalTime(),
                 OrganizationId = p.OrganizationId,
-                // TestPlans = p.TestPlans.Select(t => new TestPlanDTO
-                // {
-                //     TestPlanId = t.TestPlanId,
-                //     Name = t.Name
-                // }).ToList()
+                //TestPlans = p.TestPlans.Select(t => new TestPlanDTO
+                //{
+                //    TestPlanId = t.TestPlanId,
+                //    Name = t.Name
+                //}).ToList()
             }).ToList();
 
            

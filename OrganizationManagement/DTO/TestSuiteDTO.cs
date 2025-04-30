@@ -14,8 +14,9 @@ namespace OrganizationManagement.DTO
         public string Description { get; set; }
 
         public int TestPlanId { get; set; }
-
+      
 
         public ICollection<TestCase>? TestCases { get; set; }
+
     }
 }

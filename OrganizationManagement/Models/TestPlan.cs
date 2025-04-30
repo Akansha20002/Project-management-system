@@ -19,7 +19,7 @@ namespace OrganizationManagement.Models
         public string Strategy { get; set; }
 
         public int ProjectId { get; set; }
-
+        public Project Project { get; set; }
 
         public ICollection<TestSuite> TestSuites { get; set; }
     }
