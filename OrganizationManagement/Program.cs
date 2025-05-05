@@ -76,7 +76,7 @@ builder.Services.AddScoped<ITestSuiteService, TestSuiteService>();
 builder.Services.AddScoped<ITestSuiteRepository, TestSuiteRepository>();
 
 builder.Services.AddScoped<ITestPlanService, TestPlanService>();
-builder.Services.AddScoped<ITestPlanRepository, TestPlanRepository>();
+builder.Services.AddScoped<ITestPlanRepository, TestPlanRepository>(); 
 
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();

@@ -13,7 +13,7 @@ namespace OrganizationManagement.Controllers
             _testSuiteService = testSuiteService;
         }
 
-        // GET: TestSuite/Details/5
+        // GET: TestSuite/Details   
         public IActionResult Details(int id)
         {
             var dto = _testSuiteService.GetTestSuiteById(id);
