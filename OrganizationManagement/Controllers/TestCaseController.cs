@@ -16,7 +16,6 @@ public class TestCaseController : Controller
         _context = context;
     }
 
-    // GET: TestCase/Create
     public IActionResult Create(int testSuiteId)
     {
         var model = new TestCaseDTO
@@ -26,7 +25,6 @@ public class TestCaseController : Controller
         return View(model);
     }
 
-    // POST: TestCase/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(TestCaseDTO model)
@@ -40,7 +38,6 @@ public class TestCaseController : Controller
                 return View(model);
             }
 
-            // Format steps with numbering
             model.Steps = FormatSteps(model.Steps);
 
             var testCase = new TestCase
@@ -55,7 +52,6 @@ public class TestCaseController : Controller
             _context.Add(testCase);
             await _context.SaveChangesAsync();
 
-            // ✅ Update project status if all conditions met
             await UpdateProjectStatusAsync(model.TestSuiteId);
 
             return RedirectToAction("Details", "TestSuite", new { id = model.TestSuiteId });
@@ -64,11 +60,9 @@ public class TestCaseController : Controller
         return View(model);
     }
 
-    // GET: TestCase/Details/5
     public async Task<IActionResult> Details(int id)
     {
         var testCase = await _context.TestCases.FirstOrDefaultAsync(tc => tc.Id == id);
-
         if (testCase == null)
         {
             return NotFound();
@@ -87,7 +81,6 @@ public class TestCaseController : Controller
         return View(model);
     }
 
-    // GET: TestCase/Edit/5
     public async Task<IActionResult> Edit(int id)
     {
         var testCase = await _context.TestCases.FindAsync(id);
@@ -109,7 +102,6 @@ public class TestCaseController : Controller
         return View(model);
     }
 
-    // POST: TestCase/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, TestCaseDTO model)
@@ -127,7 +119,6 @@ public class TestCaseController : Controller
                 return NotFound();
             }
 
-            // Format steps with numbering
             model.Steps = FormatSteps(model.Steps);
 
             testCase.Title = model.Title;
@@ -138,7 +129,6 @@ public class TestCaseController : Controller
             _context.Update(testCase);
             await _context.SaveChangesAsync();
 
-            // ✅ Update project status if all conditions met
             await UpdateProjectStatusAsync(testCase.TestSuiteId);
 
             return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
@@ -147,7 +137,6 @@ public class TestCaseController : Controller
         return View(model);
     }
 
-    // GET: TestCase/Delete/5
     public async Task<IActionResult> Delete(int id)
     {
         var testCase = await _context.TestCases.FirstOrDefaultAsync(tc => tc.Id == id);
@@ -169,7 +158,6 @@ public class TestCaseController : Controller
         return View(model);
     }
 
-    // POST: TestCase/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
@@ -181,14 +169,12 @@ public class TestCaseController : Controller
             _context.TestCases.Remove(testCase);
             await _context.SaveChangesAsync();
 
-            // ✅ Recheck project status
             await UpdateProjectStatusAsync(suiteId);
         }
 
         return RedirectToAction("Details", "TestSuite", new { id = testCase.TestSuiteId });
     }
 
-    // ✅ Helper: Format steps with numbering
     private string FormatSteps(string steps)
     {
         if (string.IsNullOrWhiteSpace(steps))
@@ -214,14 +200,13 @@ public class TestCaseController : Controller
         return _context.TestCases.Any(e => e.Id == id);
     }
 
-    // ✅ Helper: Update project status to "Completed" if everything exists
+    // ✅ UPDATED: Ignore test steps — only check for test plans, suites, and cases
     private async Task UpdateProjectStatusAsync(int testSuiteId)
     {
         var testSuite = await _context.TestSuites
             .Include(ts => ts.TestPlan)
                 .ThenInclude(tp => tp.Project)
             .Include(ts => ts.TestCases)
-                .ThenInclude(tc => tc.TestSteps)
             .FirstOrDefaultAsync(ts => ts.TestSuiteId == testSuiteId);
 
         if (testSuite?.TestPlan?.Project == null) return;
@@ -232,22 +217,24 @@ public class TestCaseController : Controller
             .Where(tp => tp.ProjectId == project.ProjectId)
             .Include(tp => tp.TestSuites)
                 .ThenInclude(ts => ts.TestCases)
-                    .ThenInclude(tc => tc.TestSteps)
             .ToListAsync();
 
         bool allCompleted = allTestPlans.All(tp =>
             tp.TestSuites != null && tp.TestSuites.Any() &&
             tp.TestSuites.All(ts =>
-                ts.TestCases != null && ts.TestCases.Any() &&
-                ts.TestCases.All(tc =>
-                    tc.TestSteps != null && tc.TestSteps.Any()
-                )
+                ts.TestCases != null && ts.TestCases.Any()
             )
         );
 
         if (allCompleted && project.Status != "Completed")
         {
             project.Status = "Completed";
+            _context.Projects.Update(project);
+            await _context.SaveChangesAsync();
+        }
+        else if (!allCompleted && project.Status == "Completed")
+        {
+            project.Status = "In Progress"; // Optional fallback
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
         }
