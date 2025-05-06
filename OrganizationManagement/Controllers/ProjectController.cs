@@ -31,7 +31,7 @@ namespace OrganizationManagement.Controllers
             {
                 ProjectId = project.ProjectId,
                 ProjectName = project.ProjectName,
-                Status = project.Status,
+                Status = project.Status.ToString(),
                 Description = project.Description,
                 StartDate = DateTime.SpecifyKind(project.StartDate, DateTimeKind.Utc),
                 EndDate = DateTime.SpecifyKind(project.EndDate, DateTimeKind.Utc),
@@ -89,7 +89,7 @@ namespace OrganizationManagement.Controllers
                 var project = new Project
                 {
                     ProjectName = projectDTO.ProjectName,
-                    Status = projectDTO.Status,
+                    Status = projectDTO.Status.ToString(),
                     Description = projectDTO.Description,
                     StartDate = DateTime.SpecifyKind(projectDTO.StartDate, DateTimeKind.Utc),
                     EndDate = DateTime.SpecifyKind(projectDTO.EndDate, DateTimeKind.Utc),

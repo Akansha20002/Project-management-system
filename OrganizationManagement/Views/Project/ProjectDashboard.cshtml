@@ -1,6 +1,6 @@
 ﻿@model OrganizationManagement.DTO.ProjectDTO
 
-<h2>@Model.ProjectName</h2>
+<h2 class="mt-4">@Model.ProjectName</h2>
 
 <p><strong>Description:</strong> @Model.Description</p>
 <p><strong>Start Date:</strong> @Model.StartDate.ToString("yyyy-MM-dd")</p>
@@ -8,50 +8,63 @@
 
 <hr />
 
-@* <h3>Status</h3> *@
-@* <p> *@
-@*     @if (Model.Status.ToLower() == "completed") *@
-@*     { *@
-@*         <span style="color:green; font-weight:bold;">Completed ✅</span> *@
-@*     } *@
-@*     else if (Model.Status.ToLower() == "incomplete") *@
-@*     { *@
-@*         <span style="color:red; font-weight:bold;">Incomplete ❌</span> *@
-@*     } *@
-@*     else if (Model.Status.ToLower() == "past deadline") *@
-@*     { *@
-@*         <span style="color:orange; font-weight:bold;">Deadline Passed - Now Incomplete  ❌</span> *@
-@*     } *@
-@*     else *@
-@*     { *@
-@*         <span style="color:blue; font-weight:bold;">In Progress ⏳</span> *@
-@*     } *@
-@* </p> *@
+@* You can uncomment this block if you want to display project status *@
+@* 
+<h3>Status</h3>
+<p>
+    @if (Model.Status.ToLower() == "completed")
+    {
+        <span class="text-success fw-bold">Completed ✅</span>
+    }
+    else if (Model.Status.ToLower() == "incomplete")
+    {
+        <span class="text-danger fw-bold">Incomplete ❌</span>
+    }
+    else if (Model.Status.ToLower() == "past deadline")
+    {
+        <span class="text-warning fw-bold">Deadline Passed - Now Incomplete ❌</span>
+    }
+    else
+    {
+        <span class="text-primary fw-bold">In Progress ⏳</span>
+    }
+</p>
+<hr />
+*@
 
-@* <hr /> *@
-
-<a asp-controller="TestPlan" asp-action="Add" asp-route-projectId="@Model.ProjectId" class="btn btn-success">Add Test Plan</a>
-
+<a asp-controller="TestPlan" asp-action="Add" asp-route-projectId="@Model.ProjectId" class="btn btn-success mb-4">
+    Add Test Plan
+</a>
 
 <hr />
 
-<h3>Test Plans</h3>
+<h3 class="mb-4">Test Plans</h3>
 @if (Model.TestPlans != null && Model.TestPlans.Any())
 {
-    <ul>
+    <div class="row justify-content-start">
         @foreach (var testPlan in Model.TestPlans)
         {
-            <li>
-                @testPlan.Name
-                <a href="@Url.Action("Details", "TestPlan", new { id = testPlan.TestPlanId })">Details</a> |
-                <a href="@Url.Action("Edit", "TestPlan", new { id = testPlan.TestPlanId })">Edit</a>
-            </li>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+                <div class="card border-0 shadow-sm h-100" style="max-width: 300px; width: 100%;background-color:lightgray">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("Details", "TestPlan", new { id = testPlan.TestPlanId })"
+                               class="text-decoration-none fw-semibold"
+                               style="color: #004080;">
+                                @testPlan.Name
+                            </a>
+
+                        </h5>
+                       
+                    </div>
+                </div>
+            </div>
         }
-    </ul>
+    </div>
 }
 else
 {
-    <p style="color:gray;">No test plans found for this project.</p>
+    <p class="text-muted">No test plans found for this project.</p>
 }
 
 <hr />
@@ -59,7 +72,7 @@ else
 <form asp-action="DeleteProject" method="post">
     <input type="hidden" name="projectId" value="@Model.ProjectId" />
     <button type="submit"
-            style="background-color:#dc3545; color:white; padding:8px 12px; border:none; border-radius:4px;"
+            class="btn btn-danger"
             onclick="return confirm('Are you sure you want to delete this project?')">
         Delete Project
     </button>
