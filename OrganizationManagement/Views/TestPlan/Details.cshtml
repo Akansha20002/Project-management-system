@@ -64,14 +64,16 @@
 
                         @* <a href="@Url.Action("Create", "TestCase", new { testSuiteId = Model.TestSuiteId })" class="btn btn-sm btn-primary">Add Test Case</a> *@
                         <!-- Edit Button -->
-                        <a asp-controller="TestSuite" asp-action="Edit" asp-route-id="@suite.TestSuiteId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-controller="TestSuite" asp-action="Edit" asp-route-id="@suite.TestSuiteId" class="btn btn-sm btn-warning" style="background-color:#ffc107">Edit</a>
 
-                        <a asp-controller="TestSuite" asp-action="Details" asp-route-id="@suite.TestSuiteId" class="btn btn-sm btn-info">View Details</a>
+                        <a asp-controller="TestSuite" asp-action="Details" asp-route-id="@suite.TestSuiteId" class="btn btn-sm btn-info" style="background-color:  skyblue">View Details </a>
 
-                        
+
                         <!-- Delete Button -->
                         <form asp-controller="TestSuite" asp-action="Delete" asp-route-id="@suite.TestSuiteId" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this test suite?');">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-danger" style="background-color: #f44336;border-color:#f44336;" onclick="return confirm('Are you sure you want to delete this test suite?');">
+                                Delete
+                            </button>
                         </form>
                     </td>
                 </tr>

@@ -2,29 +2,34 @@
     ViewData["Title"] = "Project Management";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Project Management</h1>
+<div class="container text-center my-5">
+    <h1 class="display-4 fw-bold text-primary mb-4">Project Management</h1>
 
-    <a href="#" class="btn btn-create-org" data-bs-toggle="modal" data-bs-target="#authModal"> 🏢 Create Organization</a>
-    <!-- <br /> -->
-    <a asp-action="Login" class="btn btn-login-link">🔐 Login</a>
+    <!-- Create Organization Button -->
+    <a href="#" class="btn btn-create-org btn-lg px-4 py-2 mb-3" data-bs-toggle="modal" data-bs-target="#authModal">
+        🏢 Create Organization
+    </a>
+
+    <!-- Login Link -->
+    <a asp-action="Login" class="btn btn-login-link btn-lg px-4 py-2 mb-3">
+        🔐 Login
+    </a>
 </div>
 
+<!-- Modal for Login/Register -->
 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
+        <div class="modal-content modal-content shadow-lg border-0">
             <div class="modal-header">
                 <h5 class="modal-title" id="authModalLabel">Welcome</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body text-center">
-                <p>Please log in or register to continue creating an organization.</p>
-                <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Login</a>
-                <a class="btn btn-secondary" asp-controller="Account" asp-action="Register">Register</a>
+                <p class="lead mb-4">Please log in or register to continue creating an organization.</p>
+                <a class="btn btn-primary btn-lg mx-2" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="btn btn-secondary btn-lg mx-2" asp-controller="Account" asp-action="Register">Register</a>
             </div>
-
         </div>
     </div>
 </div>

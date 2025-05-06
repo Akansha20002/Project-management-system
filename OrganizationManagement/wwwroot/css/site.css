@@ -177,3 +177,212 @@ html {
 .form-floating > .form-control-plaintext:focus::placeholder {
   text-align: start;
 }
+
+
+/*FOR HOME PAGE */
+
+/* Create Organization Button */
+.btn-create-org {
+    background-color: #007bff;
+    color: white;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .btn-create-org:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+/* Login Button Styling */
+.btn-login-link {
+    color: #007bff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+    .btn-login-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f0f4f8, #ffffff);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-body {
+    font-size: 16px;
+    color: #555;
+}
+
+    .modal-body .btn {
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .modal-body .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .modal-body .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+/*FOR HOME PAGE ENDS HERE*/
+
+
+/*for postloginoption view*/
+/* Lighter Styling for Your View */
+
+/* Body Styling */
+body {
+    background-color: #f8f9fa; /* Lighter background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Title Styling */
+h2 {
+    font-size: 2.5rem;
+    color: #444; /* Darker shade for contrast */
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Add Organization Button Styling */
+.btn-primary {
+    background-color: #4fa3f7; /* Lighter blue */
+    border-color: #4fa3f7;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: #357ab7; /* Slightly darker blue */
+        border-color: #357ab7;
+    }
+
+/* Your Organizations Heading */
+h3 {
+    font-size: 2rem;
+    margin-top: 30px;
+    color: #444; /* Darker shade for contrast */
+    font-weight: 500;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px;
+    background: #fdfdfd; /* Light background for cards */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+/* Card Body Styling */
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Card Title Styling */
+.card-title {
+    font-size: 1.5rem;
+    color: #008cba; /* Lighter shade of blue */
+    margin-bottom: 15px;
+}
+
+/* Card Text Styling */
+.card-text {
+    font-size: 1rem;
+    color: #6c757d; /* Softer gray */
+    margin-bottom: 15px;
+}
+
+/* Button Styling Inside Cards */
+.card .btn-outline-primary {
+    background-color: #5bc0de; /* Lighter blue */
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+    .card .btn-outline-primary:hover {
+        background-color: #31b0d5; /* Slightly darker blue */
+        border-color: #31b0d5;
+    }
+
+/* Delete Button Styling Inside Cards */
+.card .btn-outline-danger {
+    background-color: #e57373; /* Lighter red */
+    color: white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    text-transform: uppercase;
+}
+
+    .card .btn-outline-danger:hover {
+        background-color: #f44336; /* Standard red */
+        border-color: #f44336;
+    }
+
+/* Add Some Space between Cards */
+.row {
+    margin-top: 30px;
+}
+
+/* Modal Button Styling */
+.modal-content {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #f1f3f5;
+}
+
+/* Modal Body Text */
+.modal-body {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+    .modal-body a {
+        margin: 5px;
+        padding: 8px 15px;
+    }
+
+/*ends here*/
+
+
+
+/*FOR TES PLAN DETAIL*/
+
+
+/*ENDE HERE*/

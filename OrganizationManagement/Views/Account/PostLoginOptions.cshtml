@@ -1,16 +1,17 @@
-   @{
+@{
     var userId = ViewBag.UserId;
     var userName = ViewBag.UserName ?? Context.Request.Cookies["UserName"];
     var organizations = ViewBag.Organizations as List<OrganizationManagement.Models.Organization>;
 }
 
-<h2>Welcome, @userName!</h2>
+<div class="text-center">
+    <h2>Welcome, @userName!</h2>
 
-<a class="btn btn-primary" href="@Url.Action("RegisterName", "Account", new { userId = userId })">
-    ➕ Add Organization
-</a>
+    <a class="btn btn-primary" href="@Url.Action("RegisterName", "Account", new { userId = userId })">
+        ➕ Add Organization
+    </a>
+</div>
 
-<br />
 <br />
 
 <h3>Your Organizations</h3>
@@ -31,7 +32,7 @@
 
                         <form asp-action="DeleteOrganization" asp-controller="Account" method="post" class="mt-2" onsubmit="return confirmDelete(event)">
                             <input type="hidden" name="id" value="@org.Id" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger" style="background-color:#f44336">🗑 Delete</button>
                         </form>
                     </div>
                 </div>

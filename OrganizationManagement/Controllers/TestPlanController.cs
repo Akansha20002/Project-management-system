@@ -74,11 +74,15 @@ namespace OrganizationManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
+            var testPlan = _testPlanService.GetTestPlanById(id);
+            if (testPlan == null)
+                return NotFound();
+
             var success = _testPlanService.DeleteTestPlan(id);
             if (!success)
                 return NotFound();
 
-            return RedirectToAction("ProjectDashboard", "Project");
+            return RedirectToAction("ProjectDashboard", "Project", new { projectId = testPlan.ProjectId });
         }
 
         [HttpGet]
