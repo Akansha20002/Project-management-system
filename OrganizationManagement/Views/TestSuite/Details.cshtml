@@ -1,20 +1,53 @@
 ﻿@model OrganizationManagement.Models.TestSuite
 
-<h2>Test Suite Details</h2>
-
 <div>
-    <h3>@Model.Name</h3> <!-- Test Suite Name -->
-    <p>@Model.Description</p> <!-- Test Suite Description -->
-
     <h4>Test Cases</h4>
     <ul>
         @foreach (var testCase in Model.TestCases)
         {
             <li>
-                <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a> <!-- Link to TestCase details -->
+                <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a>
             </li>
         }
     </ul>
 
-    <a href="@Url.Action("Create", "TestCase", new { testSuiteId = Model.TestSuiteId })" class="btn btn-sm btn-primary">Add Test Case</a>
+    <button class="btn btn-sm btn-primary" onclick="toggleForm()">Add Test Case</button>
+
+    <div id="testCaseForm" style="display: none; margin-top: 20px;">
+        <form asp-action="Create" asp-controller="TestCase" method="post">
+            <input type="hidden" name="TestSuiteId" value="@Model.TestSuiteId" />
+
+            <div class="form-group">
+                <label for="Title">Title</label>
+                <input type="text" name="Title" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea name="Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="Steps">Steps</label>
+                <textarea name="Steps" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="IsAutomated">Is Automated?</label>
+                <input type="checkbox" name="IsAutomated" />
+            </div>
+
+            <button type="submit" class="btn btn-success btn-sm">Save</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleForm()">Cancel</button>
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        function toggleForm() {
+            var form = document.getElementById('testCaseForm');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+    </script>
+}
