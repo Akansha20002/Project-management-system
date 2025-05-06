@@ -1,6 +1,5 @@
 ﻿@model OrganizationManagement.DTO.TestSuiteDTO
 
-
 <h2>Test Suite Details</h2>
 
 <div>
@@ -8,14 +7,26 @@
     <p>@Model.Description</p> <!-- Test Suite Description -->
 
     <h4>Test Cases</h4>
-    <ul>
-        @foreach (var testCase in Model.TestCases)
-        {
-            <li>
-                <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a> 
-            </li>
-        }
-    </ul>
 
-    <a href="@Url.Action("Create", "TestCase", new { testSuiteId = Model.TestSuiteId })" class="btn btn-sm btn-primary">Add Test Case</a>
+    @if (Model.TestCases != null && Model.TestCases.Any())
+    {
+        <ul>
+            @foreach (var testCase in Model.TestCases)
+            {
+                <li>
+                    <a href="@Url.Action("Details", "TestCase", new { id = testCase.Id })">@testCase.Title</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-info">No test cases.</div>
+    }
+
+    <a href="@Url.Action("Create", "TestCase", new { testSuiteId = Model.TestSuiteId })" class="btn btn-sm btn-primary">➕ Add Test Case</a>
+
+    <a href="@Url.Action("Details", "TestPlan", new { id = Model.TestPlanId })" class="btn btn-secondary ms-2">
+        ← Back to Test Plan
+    </a>
 </div>

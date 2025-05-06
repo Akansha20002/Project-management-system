@@ -44,7 +44,7 @@
             <li>
                 @testPlan.Name
                 <a href="@Url.Action("Details", "TestPlan", new { id = testPlan.TestPlanId })">Details</a> |
-                <a href="@Url.Action("Edit", "TestPlan", new { id = testPlan.TestPlanId })">Edit</a>
+                
             </li>
         }
     </ul>
@@ -63,4 +63,10 @@ else
             onclick="return confirm('Are you sure you want to delete this project?')">
         Delete Project
     </button>
+    <a asp-controller="Organization" asp-action="Dashboard" class="btn btn-primary">
+        ← Back
+    </a>
 </form>
+
+
+
