@@ -94,18 +94,26 @@ namespace OrganizationManagement.Controllers
             return View(dto);
         }
 
-        // POST: TestSuite/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            var suite = _testSuiteService.GetTestSuiteById(id);
+            if (suite == null)
+            {
+                return NotFound();
+            }
+
+            var testPlanId = suite.TestPlanId;
+
             var success = _testSuiteService.DeleteTestSuite(id);
             if (!success)
             {
                 return NotFound();
             }
 
-            return RedirectToAction("Details", "TestPlan", new { id = id });
+            return RedirectToAction("Details", "TestPlan", new { id = testPlanId });
         }
+
     }
 }

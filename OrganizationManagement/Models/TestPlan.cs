@@ -6,7 +6,7 @@ namespace OrganizationManagement.Models
     {
         public int TestPlanId { get; set; }
 
-        [Required, MaxLength(10)]
+        [Required, MaxLength(300)]
         public string Name { get; set; }
 
         [Required, MaxLength(500)]
