@@ -44,7 +44,6 @@ namespace OrganizationManagement.Controllers
 
                 _tables.TestsPlans.Add(testPlan);
 
-                // ✅ Automatically update project status to "In Progress"
                 var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == dto.ProjectId);
                 if (project != null && project.Status != "In Progress")
                 {

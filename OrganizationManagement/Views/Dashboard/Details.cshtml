@@ -1,0 +1,42 @@
+﻿@model OrganizationManagement.DTO.OrganizationDetailsDTO
+
+@{
+    ViewBag.Title = "Organization Details";
+}
+
+<div class="container mt-4">
+    <h2>Projects under @Model.Name</h2>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Project Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Projects != null && Model.Projects.Any())
+                {
+                    foreach (var project in Model.Projects)
+                    {
+                        <tr>
+                            <td>@project.ProjectId</td>
+                            <td>@project.ProjectName</td>
+                            <td>@project.Status</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">No projects available for this organization.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OrganizationManagement.DBContext;
 using OrganizationManagement.DTO;
 using OrganizationManagement.Models;
+using System.Linq;
 using System.Security.Claims;
 
 namespace OrganizationManagement.Controllers
@@ -45,25 +47,6 @@ namespace OrganizationManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ShowRegisterForm()
-        {
-            ViewBag.ShowForm = true;
-
-            var orgList = _tables.Organizations
-                .Select(o => new OrganizationDTO
-                {
-                    Id = o.Id,
-                    Name = o.Name
-                }).ToList();
-
-            return View("Index", new OrganizationDTO
-            {
-                Organizations = orgList
-            });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult RegisterName(OrganizationDTO model)
         {
             if (_tables.Organizations.Any(o => o.Name == model.Name))
@@ -79,8 +62,7 @@ namespace OrganizationManagement.Controllers
                 var newOrg = new Organization
                 {
                     Name = model.Name,
-                    CreatedBy= currentUserId
-                  
+                    CreatedBy = currentUserId
                 };
 
                 _tables.Organizations.Add(newOrg);
@@ -90,15 +72,68 @@ namespace OrganizationManagement.Controllers
                 return RedirectToAction("Index");
             }
 
-            model.Organizations = _tables.Organizations
-                .Select(o => new OrganizationDTO
-                {
-                    Id = o.Id,
-                    Name = o.Name
-                }).ToList();
+            return RedirectToAction("Index");
+        }
 
-            ViewBag.ShowForm = true;
-            return View("Index", model);
+        public IActionResult Details(int id)
+        {
+            var organization = _tables.Organizations
+                .Include(o => o.Projects)
+                .FirstOrDefault(o => o.Id == id);
+
+            if (organization == null)
+            {
+                TempData["Error"] = "Organization not found.";
+                return RedirectToAction("Index");
+            }
+
+            var model = new OrganizationDetailsDTO
+            {
+                Id = organization.Id,
+                Name = organization.Name,
+                Projects = organization.Projects.Select(p => new ProjectDTO
+                {
+                    ProjectId = p.ProjectId,
+                    ProjectName = p.ProjectName,
+                    Status = p.Status
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var organization = _tables.Organizations
+                .Include(o => o.Projects)
+                .FirstOrDefault(o => o.Id == id);
+
+            if (organization == null)
+            {
+                TempData["Error"] = "Organization not found.";
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                if (organization.Projects != null && organization.Projects.Any())
+                {
+                    _tables.Projects.RemoveRange(organization.Projects);
+                }
+
+                _tables.Organizations.Remove(organization);
+                _tables.SaveChanges();
+
+                TempData["Success"] = "Organization and its projects deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error deleting organization: {ex.Message}";
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -200,7 +200,7 @@ public class TestCaseController : Controller
         return _context.TestCases.Any(e => e.Id == id);
     }
 
-    // ✅ UPDATED: Ignore test steps — only check for test plans, suites, and cases
+
     private async Task UpdateProjectStatusAsync(int testSuiteId)
     {
         var testSuite = await _context.TestSuites

@@ -14,11 +14,11 @@ public class TestSuiteController : Controller
         _context = context;
     }
 
-    // GET: TestSuite/Details/5
+
     public async Task<IActionResult> Details(int id)
     {
         var testSuite = await _context.TestSuites
-            .Include(ts => ts.TestCases) // Include related TestCases
+            .Include(ts => ts.TestCases) 
             .FirstOrDefaultAsync(ts => ts.TestSuiteId == id);
 
         if (testSuite == null)
@@ -26,17 +26,15 @@ public class TestSuiteController : Controller
             return NotFound();
         }
 
-        return View(testSuite); // Return TestSuite details with associated TestCases
+        return View(testSuite); 
     }
 
-    // GET: TestSuite/Create
     public IActionResult Create(int testPlanId)
     {
         var model = new TestSuiteDTO { TestPlanId = testPlanId };
         return View(model);
     }
 
-    // POST: TestSuite/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(TestSuiteDTO model)
@@ -59,7 +57,7 @@ public class TestSuiteController : Controller
         return View(model);
     }
 
-    // GET: TestSuite/Edit/5
+    
     public async Task<IActionResult> Edit(int id)
     {
         var testSuite = await _context.TestSuites.FindAsync(id);
@@ -79,7 +77,7 @@ public class TestSuiteController : Controller
         return View(model);
     }
 
-    // POST: TestSuite/Edit/5
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, TestSuiteDTO model)
@@ -109,7 +107,6 @@ public class TestSuiteController : Controller
         return View(model);
     }
 
-    // GET: TestSuite/Delete/5
     public async Task<IActionResult> Delete(int id)
     {
         var testSuite = await _context.TestSuites
@@ -124,7 +121,7 @@ public class TestSuiteController : Controller
         return View(testSuite);
     }
 
-    // POST: TestSuite/Delete/5
+
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
