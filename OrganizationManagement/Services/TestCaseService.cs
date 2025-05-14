@@ -15,6 +15,7 @@ namespace OrganizationManagement.Services
 
         public TestCaseDTO CreateTestCase(TestCaseDTO model)
         {
+            model.Steps = FormatSteps(model.Steps);
             var testCase = new TestCase
             {
                 Title = model.Title,
@@ -40,6 +41,7 @@ namespace OrganizationManagement.Services
         public TestCaseDTO UpdateTestCase(TestCaseDTO model)
         {
             var testCase = _testCaseRepository.GetById(model.Id);
+            model.Steps = FormatSteps(model.Steps);
             if (testCase == null) return null;
 
             testCase.Title = model.Title;
@@ -93,7 +95,25 @@ namespace OrganizationManagement.Services
                 IsAutomated = testCase.IsAutomated
             };
         }
+        private string FormatSteps(string steps)
+        {
+            if (string.IsNullOrWhiteSpace(steps))
+                return steps;
 
+            var lines = steps
+                .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (lines.All(line => line.Trim().StartsWith("Step ")))
+            {
+                return steps;
+            }
+
+            var formatted = lines
+                .Select((line, index) => $"Step {index + 1}: {line.Trim()}")
+                .ToArray();
+
+            return string.Join(Environment.NewLine, formatted);
+        }
         public bool TestCaseExists(int id)
         {
             return _testCaseRepository.Exists(id);

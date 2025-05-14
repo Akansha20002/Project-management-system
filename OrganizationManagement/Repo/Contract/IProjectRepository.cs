@@ -8,4 +8,7 @@ public interface IProjectRepository
     void AddProject(Project project);
     void DeleteProject(Project project);
     void UpdateProjects(List<Project> projects);
+    bool ProjectExists(string name, int orgId, int excludeProjectId);
+    void UpdateProject(Project project);
+
 }

@@ -7,7 +7,6 @@
 
 <h2>Projects for Organization</h2>
 
-
 <a asp-controller="Project" asp-action="AddProject" asp-route-organizationId="@organizationId" class="btn btn-primary">
     Add Project
 </a>
@@ -49,10 +48,15 @@
 
                         <a href="@Url.Action("ProjectDashboard", "Project", new { projectId = project.ProjectId })" class="btn btn-outline-primary">View Details</a>
 
-                        <form asp-action="DeleteProject" asp-controller="Project" method="post" class="mt-2" onsubmit="return confirmDelete(event)">
-                            <input type="hidden" name="projectId" value="@project.ProjectId" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger" style="background-color:#f44336">🗑 Delete</button>
-                        </form>
+                        <!-- Centering buttons -->
+                        <div class="d-flex justify-content-center gap-2 mt-3">
+                            <a asp-controller="Project" asp-action="EditProject" asp-route-projectId="@project.ProjectId" class="btn btn-sm btn-outline-info">✏️ Edit</a>
+
+                            <form asp-action="DeleteProject" asp-controller="Project" method="post" onsubmit="return confirmDelete(event)">
+                                <input type="hidden" name="projectId" value="@project.ProjectId" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger" style="background-color:#f44336">🗑 Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,7 +71,6 @@ else
 <a asp-controller="Account" asp-action="PostLoginOptions" class="btn btn-primary">
     ← Back to Account Options
 </a>
-
 
 <script type="text/javascript">
     function confirmDelete(event) {

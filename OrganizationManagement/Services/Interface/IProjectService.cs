@@ -7,4 +7,6 @@ public interface IProjectService
     bool TryAddProject(ProjectDTO dto, out string error);
     bool DeleteProject(int projectId, out int organizationId);
     ProjectStatusGroupViewModel GetProjectsByStatus(int organizationId);
+    bool TryUpdateProject(ProjectDTO dto, out string error);
+
 }

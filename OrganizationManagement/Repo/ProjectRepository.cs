@@ -33,6 +33,14 @@ public class ProjectRepository : IProjectRepository
             p.ProjectName.Trim().ToLower() == projectName.Trim().ToLower());
     }
 
+    public bool ProjectExists(string projectName, int organizationId, int excludeProjectId)
+    {
+        return _context.Projects.Any(p =>
+            p.OrganizationId == organizationId &&
+            p.ProjectName.Trim().ToLower() == projectName.Trim().ToLower() &&
+            p.ProjectId != excludeProjectId);
+    }
+
     public void AddProject(Project project)
     {
         _context.Projects.Add(project);
@@ -50,5 +58,10 @@ public class ProjectRepository : IProjectRepository
         _context.UpdateRange(projects);
         _context.SaveChanges();
     }
-}
 
+    public void UpdateProject(Project project)
+    {
+        _context.Projects.Update(project);
+        _context.SaveChanges();
+    }
+}

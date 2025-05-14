@@ -126,5 +126,34 @@ public class ProjectService : IProjectService
             PendingProjects = pending
         };
     }
+
+    public bool TryUpdateProject(ProjectDTO dto, out string error)
+    {
+        error = string.Empty;
+
+        var existing = _repo.GetProjectById(dto.ProjectId);
+        if (existing == null)
+        {
+            error = "Project not found.";
+            return false;
+        }
+
+        if (dto.EndDate.Date < dto.StartDate.Date)
+            error = "End date cannot be before start date.";
+        else if (_repo.ProjectExists(dto.ProjectName, dto.OrganizationId, dto.ProjectId))
+            error = "Another project with the same name exists.";
+
+        if (!string.IsNullOrEmpty(error)) return false;
+
+        existing.ProjectName = dto.ProjectName;
+        existing.Status = dto.Status;
+        existing.Description = dto.Description;
+        existing.StartDate = DateTime.SpecifyKind(dto.StartDate, DateTimeKind.Utc);
+        existing.EndDate = DateTime.SpecifyKind(dto.EndDate, DateTimeKind.Utc);
+
+        _repo.UpdateProject(existing);
+        return true;
+    }
+
 }
 

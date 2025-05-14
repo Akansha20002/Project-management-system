@@ -1,13 +1,14 @@
 ﻿@model OrganizationManagement.DTO.TestSuiteDTO
+@{
+    var testCaseDto = new OrganizationManagement.DTO.TestCaseDTO
+            {
+                TestSuiteId = Model.TestSuiteId
+            };
+}
 
-<h2>Test Suite Details</h2>
+<h2>Test Case Details</h2>
 
 <div>
-    <h3>@Model.Name</h3> <!-- Test Suite Name -->
-    <p>@Model.Description</p> <!-- Test Suite Description -->
-
-    <h4>Test Cases</h4>
-
     @if (Model.TestCases != null && Model.TestCases.Any())
     {
         <ul>
@@ -24,10 +25,54 @@
         <div class="alert alert-info">No test cases.</div>
     }
 
-    <a href="@Url.Action("Create", "TestCase", new { testSuiteId = Model.TestSuiteId })" class="btn btn-sm btn-primary">➕ Add Test Case</a>
+    <!-- Add button to toggle form -->
+    <button id="toggleFormBtn" class="btn btn-sm btn-primary">➕ Add Test Case</button>
 
+    <!-- Back link -->
     <a href="@Url.Action("Details", "TestPlan", new { id = Model.TestPlanId })" class="btn btn-secondary ms-2">
         ← Back to Test Plan
     </a>
 </div>
 
+<!-- Hidden form area -->
+<div id="createFormContainer" class="mt-4" style="display:none;">
+    <h3>Create Test Case</h3>
+    <form asp-action="Create" asp-controller="TestCase" method="post">
+        <input type="hidden" name="TestSuiteId" value="@testCaseDto.TestSuiteId" />
+
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" name="Title" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <textarea name="Description" class="form-control" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="Steps">Steps</label>
+            <textarea name="Steps" class="form-control" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <div class="form-check">
+                <input type="hidden" name="IsAutomated" value="false" />
+                <input name="IsAutomated" class="form-check-input" type="checkbox" value="true" />
+                <label class="form-check-label">Is Automated?</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create Test Case</button>
+       
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("toggleFormBtn").addEventListener("click", function () {
+            var form = document.getElementById("createFormContainer");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        });
+    </script>
+}

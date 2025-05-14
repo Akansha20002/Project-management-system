@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrganizationManagement.DTO;
+using OrganizationManagement.Models;
 
 public class ProjectController : Controller
 {
@@ -27,17 +28,18 @@ public class ProjectController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult AddProject(ProjectDTO dto)
+    public IActionResult AddProject(ProjectDTO projectDTO)
     {
-        if (!_service.TryAddProject(dto, out string error))
-        {
-            if (!string.IsNullOrEmpty(error))
-                ModelState.AddModelError(string.Empty, error);
+        if (!ModelState.IsValid)
+            return View(projectDTO);
 
-            return View(dto);
+        if (!_service.TryAddProject(projectDTO, out string error))
+        {
+            ModelState.AddModelError(string.Empty, error);
+            return View(projectDTO);
         }
 
-        return RedirectToAction("Dashboard", "Organization", new { organizationId = dto.OrganizationId });
+        return RedirectToAction("Dashboard", "Organization", new { organizationId = projectDTO.OrganizationId });
     }
 
     [HttpPost]
@@ -55,5 +57,33 @@ public class ProjectController : Controller
         var viewModel = _service.GetProjectsByStatus(organizationId);
         return View("ProjectStatusDashboard", viewModel);
     }
-}
 
+
+//EDIT PROJECT
+    [HttpGet]
+    public IActionResult EditProject(int projectId)
+    {
+        var projectDTO = _service.GetProjectDashboard(projectId);
+        if (projectDTO == null)
+            return NotFound();
+
+        return View(projectDTO); // this returns EditProject.cshtml
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult EditProject(ProjectDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return View(dto);
+
+        if (!_service.TryUpdateProject(dto, out string error))
+        {
+            ModelState.AddModelError(string.Empty, error);
+            return View(dto);
+        }
+
+        return RedirectToAction("ProjectDashboard", new { projectId = dto.ProjectId });
+    }
+
+}
