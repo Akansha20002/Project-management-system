@@ -1,7 +1,7 @@
 /* --------------------------------
    Base Styles
 --------------------------------- */
-body {
+/*body {
   background: url('/images/bg.jpg') no-repeat center center fixed;
   background-size: cover;
   margin: 0;
@@ -20,12 +20,12 @@ html {
   html {
     font-size: 16px;
   }
-}
+}*/
 
 /* --------------------------------
    Container & Cards
 --------------------------------- */
-.container {
+/*.container {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   padding: 20px;
@@ -34,12 +34,12 @@ html {
 
 .bg-opacity-90 {
   background-color: rgba(255, 255, 255, 0.9) !important;
-}
+}*/
 
 /* --------------------------------
    Buttons
 --------------------------------- */
-.btn-login,
+/*.btn-login,
 .btn-login-link,
 .btn-register,
 .btn-create-org {
@@ -50,10 +50,10 @@ html {
   border: none;
   display: inline-block;
   text-decoration: none;
-}
+}*/
 
 /* Login Buttons */
-.btn-login,
+/*.btn-login,
 .btn-login-link {
   background: linear-gradient(to right, #007bff, #0056b3);
   color: white !important;
@@ -65,10 +65,10 @@ html {
   background: linear-gradient(to right, #0056b3, #003f7f);
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 123, 255, 0.4);
-}
+}*/
 
 /* Register / Create Organization Buttons */
-.btn-register,
+/*.btn-register,
 .btn-create-org {
   background: linear-gradient(to right, #28a745, #218838);
   color: white !important;
@@ -80,10 +80,10 @@ html {
   background: linear-gradient(to right, #218838, #1e7e34);
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
-}
+}*/
 
 /* Focus Styles */
-.btn:focus,
+/*.btn:focus,
 .btn:active:focus,
 .btn-link.nav-link:focus,
 .form-control:focus,
@@ -94,12 +94,12 @@ html {
 .form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
   border-color: #80bdff;
-}
+}*/
 
 /* --------------------------------
    Navbar
 --------------------------------- */
-.navbar {
+/*.navbar {
   background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -112,7 +112,188 @@ html {
 
 .nav-link:hover {
   color: #007bff !important;
+}*/
+
+/* --------------------------------
+   Footer
+--------------------------------- */
+/* footer,
+.footer {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid #dee2e6;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+  color: black;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
+} */
+/*.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #f1f1f1;
+  background: transparent;
+  z-index: 1000;
+  padding: 5px 0;
+  pointer-events: none;
+}*/
+/*.custom-footer {
+  background-color: rgba(248, 249, 250, 0.9);
+  color: #212529;
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid #dee2e6;
+  text-align: center;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  width: 100%;
+  z-index: 1;
 }
+
+.footer small {
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}*/
+/* --------------------------------
+   Form Floating Labels
+--------------------------------- */
+/*.form-floating > .form-control::placeholder,
+.form-floating > .form-control-plaintext::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control:focus::placeholder,
+.form-floating > .form-control-plaintext:focus::placeholder {
+  text-align: start;
+}*/
+
+
+/* --------------------------------
+   Base Styles
+--------------------------------- */
+body {
+    background: url('/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* --------------------------------
+   Container & Cards
+--------------------------------- */
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.bg-opacity-90 {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* --------------------------------
+   Buttons
+--------------------------------- */
+.btn-login,
+.btn-login-link,
+.btn-register,
+.btn-create-org {
+    padding: 0.45rem 1.2rem;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* Login Buttons */
+.btn-login,
+.btn-login-link {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+    .btn-login:hover,
+    .btn-login-link:hover {
+        background: linear-gradient(to right, #0056b3, #003f7f);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 123, 255, 0.4);
+    }
+
+/* Register / Create Organization Buttons */
+.btn-register,
+.btn-create-org {
+    background: linear-gradient(to right, #28a745, #218838);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+    .btn-register:hover,
+    .btn-create-org:hover {
+        background: linear-gradient(to right, #218838, #1e7e34);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
+    }
+
+/* Focus Styles */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    border-color: #80bdff;
+}
+
+/* --------------------------------
+   Navbar
+--------------------------------- */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link,
+.navbar-brand {
+    color: #333 !important;
+    font-weight: bold;
+}
+
+    .nav-link:hover {
+        color: #007bff !important;
+    }
 
 /* --------------------------------
    Footer
@@ -145,35 +326,244 @@ html {
   pointer-events: none;
 }*/
 .custom-footer {
-  background-color: rgba(248, 249, 250, 0.9);
-  color: #212529;
-  font-size: 0.85rem;
-  padding: 0.5rem 0;
-  border-top: 1px solid #dee2e6;
-  text-align: center;
-  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
-  position: relative;
-  width: 100%;
-  z-index: 1;
+    background-color: rgba(248, 249, 250, 0.9);
+    color: #212529;
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    width: 100%;
+    z-index: 1;
 }
 
 .footer small {
-  pointer-events: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-  padding: 6px 12px;
-  border-radius: 20px;
-  display: inline-block;
+    pointer-events: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-block;
 }
 /* --------------------------------
    Form Floating Labels
 --------------------------------- */
 .form-floating > .form-control::placeholder,
 .form-floating > .form-control-plaintext::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
 .form-floating > .form-control:focus::placeholder,
 .form-floating > .form-control-plaintext:focus::placeholder {
-  text-align: start;
+    text-align: start;
 }
+
+
+/*FOR HOME PAGE */
+
+/* Create Organization Button */
+.btn-create-org {
+    background-color: #007bff;
+    color: white;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .btn-create-org:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+/* Login Button Styling */
+.btn-login-link {
+    color: #007bff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+    .btn-login-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f0f4f8, #ffffff);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-body {
+    font-size: 16px;
+    color: #555;
+}
+
+    .modal-body .btn {
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .modal-body .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .modal-body .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+/*FOR HOME PAGE ENDS HERE*/
+
+
+/*for postloginoption view*/
+/* Lighter Styling for Your View */
+
+/* Body Styling */
+body {
+    background-color: #f8f9fa; /* Lighter background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Title Styling */
+h2 {
+    font-size: 2.5rem;
+    color: #444; /* Darker shade for contrast */
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Add Organization Button Styling */
+.btn-primary {
+    background-color: #4fa3f7; /* Lighter blue */
+    border-color: #4fa3f7;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: #357ab7; /* Slightly darker blue */
+        border-color: #357ab7;
+    }
+
+/* Your Organizations Heading */
+h3 {
+    font-size: 2rem;
+    margin-top: 30px;
+    color: #444; /* Darker shade for contrast */
+    font-weight: 500;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px;
+    background: #fdfdfd; /* Light background for cards */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+/* Card Body Styling */
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Card Title Styling */
+.card-title {
+    font-size: 1.5rem;
+    color: #008cba; /* Lighter shade of blue */
+    margin-bottom: 15px;
+}
+
+/* Card Text Styling */
+.card-text {
+    font-size: 1rem;
+    color: #6c757d; /* Softer gray */
+    margin-bottom: 15px;
+}
+
+/* Button Styling Inside Cards */
+.card .btn-outline-primary {
+    background-color: #5bc0de; /* Lighter blue */
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+    .card .btn-outline-primary:hover {
+        background-color: #31b0d5; /* Slightly darker blue */
+        border-color: #31b0d5;
+    }
+
+/* Delete Button Styling Inside Cards */
+.card .btn-outline-danger {
+    background-color: #e57373; /* Lighter red */
+    color: white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    text-transform: uppercase;
+}
+
+    .card .btn-outline-danger:hover {
+        background-color: #f44336; /* Standard red */
+        border-color: #f44336;
+    }
+
+/* Add Some Space between Cards */
+.row {
+    margin-top: 30px;
+}
+
+/* Modal Button Styling */
+.modal-content {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #f1f3f5;
+}
+
+/* Modal Body Text */
+.modal-body {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+    .modal-body a {
+        margin: 5px;
+        padding: 8px 15px;
+    }
+
+/*ends here*/
+
+
+
+/*FOR TES PLAN DETAIL*/
+
+
+/*ENDE HERE*/

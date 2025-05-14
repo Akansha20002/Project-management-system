@@ -1,0 +1,52 @@
+﻿@model OrganizationManagement.DTO.ProjectDTO
+
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+<h2>Edit Project</h2>
+
+<form asp-action="EditProject" method="post">
+    <input type="hidden" asp-for="ProjectId" />
+    <input type="hidden" asp-for="Status" />
+
+    <div class="mb-3">
+        <label class="form-label">Project Name</label>
+        <input type="text" class="form-control" asp-for="ProjectName" />
+        <span asp-validation-for="ProjectName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Start Date</label>
+        <input type="date" class="form-control" asp-for="StartDate" readonly />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">End Date</label>
+        <input type="date" class="form-control" asp-for="EndDate" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select class="form-select" asp-for="Status">
+            <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>
+            <option value="InProgress" selected="@(Model.Status == "InProgress")">In Progress</option>
+            <option value="Completed" selected="@(Model.Status == "Completed")">Completed</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+
+<a href="@Url.Action("ProjectDashboard", "Project", new { projectId = Model.ProjectId })">Cancel</a>

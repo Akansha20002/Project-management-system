@@ -105,9 +105,58 @@ namespace OrganizationManagement.Controllers
 
             return View(projectDTO);
         }
+        [HttpGet]
+        public IActionResult EditProject(int projectId)
+        {
+            var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+            if (project == null)
+                return NotFound();
 
-      
+            var projectDTO = new ProjectDTO
+            {
+                ProjectId = project.ProjectId,
+                ProjectName = project.ProjectName,
+                Status = project.Status,
+                Description = project.Description,
+                StartDate = DateTime.SpecifyKind(project.StartDate, DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(project.EndDate, DateTimeKind.Utc),
+                OrganizationId = project.OrganizationId
+            };
+
+            return View("EditProject", projectDTO);
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditProject(ProjectDTO projectDTO)
+        {
+            var project = _tables.Projects.FirstOrDefault(p => p.ProjectId == projectDTO.ProjectId);
+            if (project == null)
+                return NotFound();
+
+            if (projectDTO.EndDate.Date < project.StartDate.Date)
+            {
+                ModelState.AddModelError("EndDate", "End date cannot be before start date.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                project.ProjectName = projectDTO.ProjectName;
+                project.Description = projectDTO.Description;
+                project.EndDate = DateTime.SpecifyKind(projectDTO.EndDate, DateTimeKind.Utc);
+                project.Status = projectDTO.Status;
+
+                _tables.SaveChanges();
+
+                return RedirectToAction("ProjectDashboard", new { projectId = project.ProjectId });
+            }
+
+            return View("EditProject", projectDTO);
+        }
+  
+
+
+[HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteProject(int projectId)
         {

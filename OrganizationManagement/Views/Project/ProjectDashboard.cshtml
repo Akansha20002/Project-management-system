@@ -31,7 +31,10 @@
 </p>
 <hr />
 *@
-
+@* <a href="/Project/EditProject?projectId=@Model.ProjectId" class="btn btn-primary">Edit Project</a> *@
+<a asp-controller="Project" asp-action="EditProject" asp-route-projectId="@Model.ProjectId" class="btn btn-primary mb-4">
+Edit Project
+</a>
 <a asp-controller="TestPlan" asp-action="Add" asp-route-projectId="@Model.ProjectId" class="btn btn-success mb-4">
     Add Test Plan
 </a>
@@ -76,4 +79,11 @@ else
             onclick="return confirm('Are you sure you want to delete this project?')">
         Delete Project
     </button>
+
+<a asp-controller="Organization"
+   asp-action="Dashboard"
+   asp-route-organizationId="@Model.OrganizationId"
+   class="btn btn-primary">
+    ← Back to Dashboard
+</a>
 </form>
