@@ -15,6 +15,7 @@
 
     <div id="testCaseForm" style="display: none; margin-top: 20px;">
         <form asp-action="Create" asp-controller="TestCase" method="post">
+          
             <input type="hidden" name="TestSuiteId" value="@Model.TestSuiteId" />
 
             <div class="form-group">
@@ -24,17 +25,22 @@
 
             <div class="form-group">
                 <label for="Description">Description</label>
-                <textarea name="Description" class="form-control" rows="3"></textarea>
+                <textarea name="Description" class="form-control" rows="3" required></textarea>
             </div>
 
             <div class="form-group">
                 <label for="Steps">Steps</label>
-                <textarea name="Steps" class="form-control" rows="4"></textarea>
+                <textarea name="Steps" class="form-control" rows="4" required></textarea>
             </div>
 
             <div class="form-group">
-                <label for="IsAutomated">Is Automated?</label>
-                <input type="checkbox" name="IsAutomated" />
+                <div class="form-check">
+                   
+                    <input type="hidden" name="IsAutomated" value="false" />
+
+                    <input type="checkbox" name="IsAutomated" class="form-check-input" value="true" />
+                    <label class="form-check-label">Is Automated?</label>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-success btn-sm">Save</button>

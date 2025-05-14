@@ -17,7 +17,7 @@ namespace OrganizationManagement.DTO
     [Required]
     public string Steps { get; set; }
 
-    public bool IsAutomated { get; set; } = false;
+    public bool IsAutomated { get; set; } 
 
    
 
