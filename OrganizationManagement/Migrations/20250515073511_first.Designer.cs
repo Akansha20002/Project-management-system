@@ -12,8 +12,8 @@ using OrganizationManagement.DBContext;
 namespace OrganizationManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250416085326_second")]
-    partial class second
+    [Migration("20250515073511_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,10 +134,6 @@ namespace OrganizationManagement.Migrations
                     b.Property<bool>("IsAutomated")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Steps")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("TestSuiteId")
                         .HasColumnType("integer");
 
@@ -196,10 +192,6 @@ namespace OrganizationManagement.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("ActualResult")
                         .IsRequired()
                         .HasColumnType("text");
@@ -207,6 +199,9 @@ namespace OrganizationManagement.Migrations
                     b.Property<string>("ExpectedResult")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("StepNumber")
+                        .HasColumnType("integer");
 
                     b.Property<int>("TestCaseId")
                         .HasColumnType("integer");
@@ -263,20 +258,24 @@ namespace OrganizationManagement.Migrations
 
             modelBuilder.Entity("OrganizationManagement.Models.TestCase", b =>
                 {
-                    b.HasOne("OrganizationManagement.Models.TestSuite", null)
+                    b.HasOne("OrganizationManagement.Models.TestSuite", "TestSuite")
                         .WithMany("TestCases")
                         .HasForeignKey("TestSuiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TestSuite");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.TestPlan", b =>
                 {
-                    b.HasOne("OrganizationManagement.Models.Project", null)
+                    b.HasOne("OrganizationManagement.Models.Project", "Project")
                         .WithMany("TestPlans")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.TestStep", b =>
@@ -290,11 +289,13 @@ namespace OrganizationManagement.Migrations
 
             modelBuilder.Entity("OrganizationManagement.Models.TestSuite", b =>
                 {
-                    b.HasOne("OrganizationManagement.Models.TestPlan", null)
+                    b.HasOne("OrganizationManagement.Models.TestPlan", "TestPlan")
                         .WithMany("TestSuites")
                         .HasForeignKey("TestPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TestPlan");
                 });
 
             modelBuilder.Entity("OrganizationManagement.Models.Admin", b =>

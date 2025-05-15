@@ -31,14 +31,11 @@ namespace OrganizationManagement.Models
         [Required, MaxLength(200)]
         public string Description { get; set; }
 
-        [Required]
-        public string Steps { get; set; }
-
         public bool IsAutomated { get; set; } = false;
 
         public int TestSuiteId { get; set; }
         public TestSuite TestSuite { get; set; }
-        public ICollection<TestStep> TestSteps { get; set; }
+        public ICollection<TestStep> TestSteps { get; set; } = new List<TestStep>();
         //public List<TestStep> TestSteps { get; set; }
     }
 }

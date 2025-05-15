@@ -20,7 +20,8 @@ namespace OrganizationManagement.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    Password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,7 +124,6 @@ namespace OrganizationManagement.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Steps = table.Column<string>(type: "text", nullable: false),
                     IsAutomated = table.Column<bool>(type: "boolean", nullable: false),
                     TestSuiteId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -144,10 +144,10 @@ namespace OrganizationManagement.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Action = table.Column<string>(type: "text", nullable: false),
+                    TestCaseId = table.Column<int>(type: "integer", nullable: false),
+                    StepNumber = table.Column<int>(type: "integer", nullable: false),
                     ExpectedResult = table.Column<string>(type: "text", nullable: false),
-                    ActualResult = table.Column<string>(type: "text", nullable: false),
-                    TestCaseId = table.Column<int>(type: "integer", nullable: false)
+                    ActualResult = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
