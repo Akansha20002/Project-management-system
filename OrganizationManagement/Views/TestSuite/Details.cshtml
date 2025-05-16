@@ -39,11 +39,7 @@
             <div id="stepsContainer">
                 <div class="step-item">
                     <label>Step 1</label>
-                    <div class="form-group">
-                        <label for="TestSteps[0].StepNumber">Step Number</label>
-                        <input type="number" name="TestSteps[0].StepNumber" class="form-control" required />
-                    </div>
-                    <div class="form-group">
+                        <div class="form-group">
                         <label for="TestSteps[0].ExpectedResult">Expected Result</label>
                         <input type="text" name="TestSteps[0].ExpectedResult" class="form-control" required />
                     </div>
@@ -81,10 +77,6 @@
             stepDiv.className = 'step-item';
             stepDiv.innerHTML = `
                 <label>Step ${stepCount}</label>
-                <div class="form-group">
-                    <label for="TestSteps[${stepCount - 1}].StepNumber">Step Number</label>
-                    <input type="number" name="TestSteps[${stepCount - 1}].StepNumber" class="form-control" required />
-                </div>
                 <div class="form-group">
                     <label for="TestSteps[${stepCount - 1}].ExpectedResult">Expected Result</label>
                     <input type="text" name="TestSteps[${stepCount - 1}].ExpectedResult" class="form-control" required />

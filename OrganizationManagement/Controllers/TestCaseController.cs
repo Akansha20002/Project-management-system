@@ -47,7 +47,7 @@ public class TestCaseController : Controller
                 var testStep = new TestStep
                 {
                     TestCaseId = testCase.Id,
-                    StepNumber = step.StepNumber,
+                    
                     ExpectedResult = step.ExpectedResult,
                     ActualResult = step.ActualResult
                 };
@@ -79,7 +79,7 @@ public class TestCaseController : Controller
             TestSteps = testCase.TestSteps.Select(ts => new TestStepDTO
             {
                 Id = ts.Id,
-                StepNumber = ts.StepNumber,
+                
                 ExpectedResult = ts.ExpectedResult,
                 ActualResult = ts.ActualResult
             }).ToList()
@@ -105,7 +105,7 @@ public class TestCaseController : Controller
             TestSteps = testCase.TestSteps.Select(ts => new TestStepDTO
             {
                 Id = ts.Id,
-                StepNumber = ts.StepNumber,
+               
                 ExpectedResult = ts.ExpectedResult,
                 ActualResult = ts.ActualResult
             }).ToList()
@@ -144,7 +144,7 @@ public class TestCaseController : Controller
                     var newStep = new TestStep
                     {
                         TestCaseId = testCase.Id,
-                        StepNumber = stepDTO.StepNumber,
+                       
                         ExpectedResult = stepDTO.ExpectedResult,
                         ActualResult = stepDTO.ActualResult
                     };
